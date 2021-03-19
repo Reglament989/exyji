@@ -77,6 +77,7 @@ flutter:
     - lib/assets/icons/user.png
     - lib/assets/icons/logo.png
     - lib/assets/lottie/circleLoader.json
+    - lib/assets/lottie/timeLoader.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

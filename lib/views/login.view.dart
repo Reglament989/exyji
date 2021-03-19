@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fl_andro_x/constants.dart';
 import 'package:fl_andro_x/encryption/backup.dart';
 import 'package:fl_andro_x/encryption/main.dart';
 import 'package:fl_andro_x/hivedb/secureStore.dart';
@@ -26,7 +27,7 @@ class LoginView extends StatelessWidget {
       final encry = await platform.invokeMethod('generateKeyPair');
       await auth.createUserWithEmailAndPassword(
           email: data.name, password: data.password);
-      final photoUrl = await firebase_storage.FirebaseStorage.instance.ref('defaults/user.png').getDownloadURL();
+      final photoUrl = await firebase_storage.FirebaseStorage.instance.ref(Storage.defaultUserPhoto).getDownloadURL();
       await auth.currentUser.updateProfile(displayName: data.name.split('@')[0], photoURL: photoUrl);
       final userRef = FirebaseFirestore.instance
           .collection('Users')
@@ -120,11 +121,11 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterLogin(
       title: 'AndroX',
-      logo: 'lib/assets/icons/logo.png',
+      logo: Assets.logo,
       onLogin: _loginUser,
       onSignup: _registerUser,
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacementNamed('/home');
+        Navigator.of(context).pushReplacementNamed(AppRouter.home);
       },
       onRecoverPassword: _recoverPassword,
       theme: LoginTheme(

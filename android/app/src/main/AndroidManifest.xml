@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.andro_x">
+    <uses-permission android:name="android.permission.VIBRATE" />
    <application
         usesCleartextTraffic="true"
         android:label="andro_x"
