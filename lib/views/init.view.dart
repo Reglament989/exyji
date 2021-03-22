@@ -17,37 +17,16 @@ class InitViewState extends State<InitView> {
       Future.delayed(Duration.zero,
               () => {Navigator.of(context).pushReplacementNamed('/home')});
     } else {
-      Future.delayed(Duration.zero, () => Navigator.of(context).pushReplacementNamed('/login'));
+      Future.delayed(Duration.zero, () =>
+          Navigator.of(context).pushReplacementNamed('/login'));
     }
     return Scaffold(
-        body: Center(),
+      body: Center(),
     );
-  }
-  void initDynamicLinks() async {
-    FirebaseDynamicLinks.instance.onLink(
-        onSuccess: (PendingDynamicLinkData dynamicLink) async {
-      final Uri deepLink = dynamicLink?.link;
-
-      if (deepLink != null) {
-        Navigator.pushNamed(context, deepLink.path);
-      }
-    }, onError: (OnLinkErrorException e) async {
-      print('onLinkError');
-      print(e.message);
-    });
-
-    final PendingDynamicLinkData data =
-        await FirebaseDynamicLinks.instance.getInitialLink();
-    final Uri deepLink = data?.link;
-
-    if (deepLink != null) {
-      Navigator.pushNamed(context, deepLink.path);
-    }
   }
 
   @override
   void initState() {
     super.initState();
-    this.initDynamicLinks();
   }
 }

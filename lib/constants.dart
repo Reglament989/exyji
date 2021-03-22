@@ -1,9 +1,13 @@
+import 'package:fl_andro_x/views/acceptInvite.view.dart';
 import 'package:fl_andro_x/views/chat.view.dart';
 import 'package:fl_andro_x/views/chatDetails.view.dart';
 import 'package:fl_andro_x/views/createChat.view.dart';
 import 'package:fl_andro_x/views/home.view.dart';
 import 'package:fl_andro_x/views/invite.view.dart';
 import 'package:fl_andro_x/views/login.view.dart';
+import 'package:flutter/foundation.dart';
+
+const serverUrl = kReleaseMode ? '' : 'http://192.168.239.141:8083';
 
 class Storage {
   static const defaultUserPhoto = 'defaults/user.png';
@@ -25,6 +29,7 @@ class AppRouter {
   static final chat = ChatView.routeName;
   static final invite = InviteView.routeName;
   static final chatDetails = ChatDetailsView.routeName;
+  static final acceptInvite = AcceptInviteView.routeName;
 }
 
 enum RoomType {

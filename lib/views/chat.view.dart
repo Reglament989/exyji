@@ -43,33 +43,35 @@ class ChatViewState extends State<ChatView> {
   }
 
   _sendMessage({room, roomID}) async {
-    final ChatViewArguments args = ModalRoute.of(context).settings.arguments;
-    final roomSecret = Hive.box<Room>('Room').get(args.chatId);
-    var msg = json.encode({
-      'msg': inputMessageController.text.trim(),
-      'sender': FirebaseAuth.instance.currentUser.uid
-    });
-    var encryptedMessage = await platform.invokeMethod('encryptMessage', {
-      'message': msg,
-      'roomSecretKey': roomSecret.secretKey[roomSecret.secretKeyVersion]
-    });
-    await FirebaseFirestore.instance
-        .collection('Rooms')
-        .doc(roomID)
-        .collection('Messages')
-        .add({
-      "encryptedMessage": encryptedMessage['encryptedMessage'],
-      'IV': encryptedMessage['IV'],
-      "createdAt": Timestamp.now()
-    });
-    inputMessageController.text = '';
+    if (inputMessageController.text.trim().length > 0) {
+      final ChatViewArguments args = ModalRoute.of(context).settings.arguments;
+      final roomSecret = Hive.box<Room>('Room').get(args.chatId);
+      var msg = json.encode({
+        'msg': inputMessageController.text.trim(),
+        'sender': FirebaseAuth.instance.currentUser.uid,
+        'date': DateFormat(DateFormat.HOUR24_MINUTE).format(DateTime.now())
+      });
+      var encryptedMessage = await platform.invokeMethod('encryptMessage', {
+        'message': msg,
+        'roomSecretKey': roomSecret.secretKey[roomSecret.secretKeyVersion]
+      });
+      await FirebaseFirestore.instance
+          .collection('Rooms')
+          .doc(roomID)
+          .collection('Messages')
+          .add({
+        "encryptedMessage": encryptedMessage['encryptedMessage'],
+        'IV': encryptedMessage['IV'],
+        "createdAt": Timestamp.now()
+      });
+      inputMessageController.text = '';
+    }
   }
 
-  _inviteMember() {
+  _inviteMember({chatId}) {
     Navigator.of(context).pushNamed('/invite',
         arguments: InviteViewArguments(
-            inviteString:
-            base64Url.encode(utf8.encode('Helklo'))));
+            chatId: chatId));
   }
 
   @override
@@ -101,7 +103,7 @@ class ChatViewState extends State<ChatView> {
                 IconButton(
                   icon: const Icon(Icons.group_add),
                   tooltip: 'Add new members',
-                  onPressed: _inviteMember,
+                  onPressed: () => _inviteMember(chatId: args.chatId),
                 )
               ],
             ),
@@ -188,6 +190,8 @@ class MessagesListState extends State<MessagesList> {
 
   listenMessages() {
     final roomSecret = Hive.box<Room>('Room').get(chatId);
+    // debugPrint(roomSecret.toString());
+    // debugPrint(chatId.toString());
     final streamMessages = chat
         .doc(chatId)
         .collection('Messages')
@@ -234,7 +238,8 @@ class MessagesListState extends State<MessagesList> {
               final msgs = messages.reversed.toList();
               return Bubble(
                 body: msgs[idx]['msg'],
-                date: DateFormat("HH:mm").format(DateTime.now()),
+                // date: DateFormat("HH:mm").format(DateTime.now()),
+                date: msgs[idx]['date'] != null ? msgs[idx]['date'] : DateFormat("HH:mm").format(DateTime.now()),
                 isSender:
                     msgs[idx]['sender'] == FirebaseAuth.instance.currentUser.uid
                         ? true

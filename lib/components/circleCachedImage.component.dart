@@ -21,7 +21,7 @@ class CircleCachedImage extends StatelessWidget {
             shape: BoxShape.circle,
             image: DecorationImage(
               image: imageProvider,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             )),
       ),
       placeholder: (ctx, url) => placeholder,

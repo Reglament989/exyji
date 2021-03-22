@@ -1,14 +1,25 @@
+import 'dart:io';
+
+import 'package:animations/animations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_andro_x/components/bubble.component.dart';
+import 'package:fl_andro_x/components/circleCachedImage.component.dart';
 import 'package:fl_andro_x/components/login.loader.dart';
+import 'package:fl_andro_x/constants.dart';
 import 'package:fl_andro_x/encryption/main.dart';
 import 'package:fl_andro_x/hivedb/room.dart';
+import 'package:fl_andro_x/utils/images.utils.dart';
 import 'package:fl_andro_x/views/invite.view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:lottie/lottie.dart';
 
 class ChatDetailsViewArguments {
   final String chatId;
@@ -25,19 +36,90 @@ class ChatDetailsView extends StatefulWidget {
   }
 }
 
+enum SecondaryType { members, invites }
+
 class ChatDetailsViewState extends State<ChatDetailsView> {
   static const platform = const MethodChannel('crypto');
+  ChatDetailsViewArguments args;
+  bool loading = false;
+  List secondaryList = [];
+  SecondaryType secondaryType = SecondaryType.members;
   final List<dynamic> roomActions = [
-    {'text': 'Invites', 'icon': Icon(Icons.group_add), 'traling': {'count': 0, 'icon': Icon(Icons.circle)}},
-    {'text': 'Notification', 'icon': Icon(Icons.chat), 'traling': {'count': 0, 'icon': Icon(Icons.circle)}},
-    {'text': 'Members filter', 'icon': Icon(Icons.filter_alt_outlined), 'traling': {'count': 0, 'icon': Icon(Icons.circle)}},
+    {
+      'text': 'Invites',
+      'icon': Icon(Icons.group_add),
+      'traling': {'count': 0, 'icon': Icon(Icons.circle)}
+    },
+    {
+      'text': 'Notification',
+      'icon': Icon(Icons.chat),
+      'traling': {'count': 0, 'icon': Icon(Icons.circle)}
+    },
+    {
+      'text': 'Members filter',
+      'icon': Icon(Icons.filter_alt_outlined),
+      'traling': {'count': 0, 'icon': Icon(Icons.circle)}
+    },
+    {
+      'text': 'Delete room',
+      'icon': Icon(
+        Icons.close,
+        color: Colors.red,
+      ),
+      'traling': {'count': 0}
+    }
   ];
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    args = ModalRoute.of(context).settings.arguments;
+  }
+
+  Future _changeRoomAvatar() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png'],
+    );
+    if (result != null) {
+      setState(() {
+        loading = true;
+      });
+      final File rawFile = File(result.files.single.path);
+      final newPhotoUrl = await compressAndPutIntoRef(
+          ref: '${Storage.roomsRef}${args.chatId}',
+          rawFile: rawFile,
+          returnUrl: true);
+      // debugPrint('New photo url $newPhotoUrl');
+      await FirebaseFirestore.instance
+          .collection('Rooms')
+          .doc(args.chatId)
+          .update({'avatar': newPhotoUrl});
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  Future _onTapAction({String action}) async {
+    if (action == 'Invites') {
+      debugPrint('Set list to invites');
+      secondaryList = (await FirebaseFirestore.instance
+              .collection('Rooms')
+              .doc(args.chatId)
+              .collection('Invites')
+              .get())
+          .docs
+          .map((e) => e.data())
+          .toList();
+      secondaryType = SecondaryType.invites;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ChatDetailsViewArguments args =
-        ModalRoute.of(context).settings.arguments;
-    final chat = FirebaseFirestore.instance.collection('Rooms');
+    final CollectionReference chat =
+        FirebaseFirestore.instance.collection('Rooms');
     return FutureBuilder(
       future: chat.doc(args.chatId).get(),
       builder: (BuildContext ctx, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -50,6 +132,11 @@ class ChatDetailsViewState extends State<ChatDetailsView> {
         }
 
         final room = snapshot.data.data();
+        if (secondaryList.length < 1) {
+          secondaryList = room['members'];
+        }
+
+        // debugPrint(room.toString());
 
         return Scaffold(
           appBar: AppBar(
@@ -58,66 +145,158 @@ class ChatDetailsViewState extends State<ChatDetailsView> {
             backgroundColor: Colors.transparent,
             foregroundColor: Colors.transparent,
           ),
-          body: Column(
+          body: Stack(
             children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20),
-                height: 200,
-                child:
-                    Image.asset('lib/assets/icons/user.png', fit: BoxFit.fill),
+              Positioned(
+                top: 0,
+                child: loading
+                    ? Container(
+                        height: 280,
+                        child: Lottie.asset(Assets.timeLoader),
+                      )
+                    : GestureDetector(
+                        onLongPress: _changeRoomAvatar,
+                        child: Container(
+                          height: 280,
+                          width: MediaQuery.of(context).size.width * 1,
+                          child: CachedNetworkImage(
+                            imageUrl: room['avatar'],
+                            fit: BoxFit.contain,
+                            placeholder: (BuildContext ctx, url) => Container(
+                              height: 280,
+                              child: Lottie.asset(Assets.timeLoader),
+                            ),
+                          ),
+                        ),
+                      ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
+                margin: EdgeInsets.only(right: 10, left: 10, top: 300),
+                height: 180,
                 decoration: BoxDecoration(
-                  border: Border.all(width: 3, color: Colors.black),
-                  borderRadius: BorderRadius.circular(25)
-                ),
+                    border: Border.all(width: 3, color: Colors.black),
+                    borderRadius: BorderRadius.circular(25)),
                 child: ListView.builder(
-                  shrinkWrap: true,
                   itemCount: roomActions.length,
                   itemBuilder: (BuildContext ctx, idx) {
                     return Container(
                       // decoration: BoxDecoration(
                       //     border: Border.
                       // ),
-                      child: ListTile(
-                        leading: roomActions[idx]['icon'],
-                        title: Text(roomActions[idx]['text']),
-                        trailing: roomActions[idx]['traling']['count'] > 0 ? roomActions[idx]['traling']['icon'] : null,
+                      child: GestureDetector(
+                        onTap: () =>
+                            _onTapAction(action: roomActions[idx]['text']),
+                        child: ListTile(
+                          leading: roomActions[idx]['icon'],
+                          title: Text(roomActions[idx]['text']),
+                          trailing: roomActions[idx]['traling']['count'] > 0
+                              ? roomActions[idx]['traling']['icon']
+                              : null,
+                        ),
                       ),
                     );
                   },
                 ),
               ),
-              ListView.separated(
-                separatorBuilder: (context, index) => Divider(
-                  color: Colors.black,
+              Container(
+                margin: EdgeInsets.only(top: 500),
+                child: SecondaryList(
+                  array: secondaryList,
+                  type: secondaryType,
                 ),
-                itemCount: room['members'].length,
-                itemBuilder: (BuildContext ctx, idx) {
-                  final memberFuture = FirebaseFirestore.instance.collection('Users').doc(room['members'][idx]).get();
-                  return FutureBuilder(
-                    future: memberFuture,
-                    builder: (BuildContext ctx, AsyncSnapshot<DocumentSnapshot> memberSnapshot) {
-                      if (memberSnapshot.hasError) {
-                        return Text('Something went wrong');
-                      }
-
-                      if (memberSnapshot.connectionState == ConnectionState.waiting) {
-                        return Scaffold();
-                      }
-
-                      final member = memberSnapshot.data.data();
-
-                      return ListTile(title: Text(member['username']), leading: Image.network(member['avatar']));
-                    },
-                  );
-                },
-              )
+              ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class SecondaryList extends StatelessWidget {
+  final array;
+  final type;
+
+  const SecondaryList(
+      {Key key, @required List this.array, @required SecondaryType this.type})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(
+        color: Colors.black,
+      ),
+      itemCount: array.length,
+      itemBuilder: (BuildContext ctx, idx) {
+        final memberFuture = FirebaseFirestore.instance
+            .collection('Users')
+            .doc(array[idx])
+            .get();
+        return FutureBuilder(
+          future: memberFuture,
+          builder: (BuildContext ctx,
+              AsyncSnapshot<DocumentSnapshot> memberSnapshot) {
+            if (memberSnapshot.hasError) {
+              return Text('Something went wrong');
+            }
+
+            if (memberSnapshot.connectionState == ConnectionState.waiting) {
+              return ListTile();
+            }
+
+            final member = memberSnapshot.data.data();
+
+            return UserTile(member: member);
+          },
+        );
+      },
+    );
+  }
+}
+
+class UserTile extends StatelessWidget {
+  final member;
+
+  UserTile({Key key, this.member}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      child: OpenContainer(
+          transitionType: ContainerTransitionType.fadeThrough,
+          closedBuilder: (BuildContext context, VoidCallback _) => Slidable(
+              actionPane: SlidableBehindActionPane(),
+              actions: [
+                IconSlideAction(
+                  caption: 'Remove',
+                  color: Colors.red[400],
+                  icon: Icons.close,
+                )
+              ],
+              closeOnScroll: true,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                color: Colors.white,
+                child: ListTile(
+                    title: Text(member['username']),
+                    leading: Container(
+                      width: 52,
+                      height: 52,
+                      child: CircleCachedImage(
+                        imageUrl: member['avatar'],
+                        placeholder: Container(
+                          width: 52,
+                          height: 52,
+                          child: Lottie.asset(Assets.circleLoader),
+                        ),
+                      ),
+                    )),
+              )),
+          openBuilder: (BuildContext context, VoidCallback _) => Center(
+            child: Text(member['username']),
+          )),
     );
   }
 }

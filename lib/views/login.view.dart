@@ -1,12 +1,8 @@
-// import 'package:fl_andro_x/components/login.loader.dart';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fl_andro_x/constants.dart';
-import 'package:fl_andro_x/encryption/backup.dart';
-import 'package:fl_andro_x/encryption/main.dart';
 import 'package:fl_andro_x/hivedb/secureStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class LoginView extends StatelessWidget {
   static final routeName = '/login';
+
   Duration get loginTime => Duration(milliseconds: 2250);
   static const platform = const MethodChannel('crypto');
 
@@ -27,21 +24,32 @@ class LoginView extends StatelessWidget {
       final encry = await platform.invokeMethod('generateKeyPair');
       await auth.createUserWithEmailAndPassword(
           email: data.name, password: data.password);
-      final photoUrl = await firebase_storage.FirebaseStorage.instance.ref(Storage.defaultUserPhoto).getDownloadURL();
-      await auth.currentUser.updateProfile(displayName: data.name.split('@')[0], photoURL: photoUrl);
+      final photoUrl = await firebase_storage.FirebaseStorage.instance
+          .ref(Storage.defaultUserPhoto)
+          .getDownloadURL();
+      await auth.currentUser.updateProfile(
+          displayName: data.name.split('@')[0], photoURL: photoUrl);
       final userRef = FirebaseFirestore.instance
           .collection('Users')
           .doc(auth.currentUser.uid);
-      // final payloadForBackup = {'password': data.password.toString(), 'salt': data.name.toString(),'privateRsaKey': encry['privateKeyRsa']};
-      // debugPrint(payloadForBackup.toString());
-      // debugPrint(encry['privateKeyRsa'].length.toString());
-      // final backupPrivateRsaKey = await platform.invokeMethod('saveBackupKey', payloadForBackup);
-      // debugPrint('Backup keys encrypted');
+      final payloadForBackup = {
+        'password': data.password.toString(),
+        'salt': data.name.toString(),
+        'privateRsaKey': encry['privateKeyRsa']
+      };
+      debugPrint(payloadForBackup.toString());
+      debugPrint(encry['privateKeyRsa'].length.toString());
+      final backupPrivateRsaKey =
+          await platform.invokeMethod('saveBackupKey', payloadForBackup);
+      debugPrint('Backup keys encrypted');
       await userRef.set({
         'publicKeyRsa': encry['publicKeyRsa'],
         'username': data.name.split('@')[0],
-        'avatar': photoUrl
-        // 'backupPrivateRsaKey': {'encryptedBackup': backupPrivateRsaKey['encryptedBackup'], 'IV': backupPrivateRsaKey['IV']},
+        'avatar': photoUrl,
+        'backupPrivateRsaKey': {
+          'encryptedBackup': backupPrivateRsaKey['encryptedBackup'],
+          'IV': backupPrivateRsaKey['IV']
+        },
       });
       final store = new SecureStore();
       store.privateKeyRsa = encry['privateKeyRsa'];
@@ -76,20 +84,29 @@ class LoginView extends StatelessWidget {
       final auth = FirebaseAuth.instance;
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: data.name, password: data.password);
-      await auth.currentUser.updateProfile(displayName: data.name.split('@')[0]);
-      // var userRef = (await FirebaseFirestore.instance
-      //         .collection('Users')
-      //         .doc(auth.currentUser.uid)
-      //         .get())
-      //     .data();
+      await auth.currentUser
+          .updateProfile(displayName: data.name.split('@')[0]);
+      var userRef = (await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(auth.currentUser.uid)
+              .get())
+          .data();
 
-      // final privateRsaKey = await platform.invokeMethod('restoreBackupKey', {'password': data.password, 'salt': data.name, 'IV': userRef['backupPrivateRsaKey']['IV'], 'cipherText': userRef['backupPrivateRsaKey']['encryptedBackup']});
+      final privateRsaKey = await platform.invokeMethod('restoreBackupKey', {
+        'password': data.password,
+        'salt': data.name,
+        'IV': userRef['backupPrivateRsaKey']['IV'],
+        'encryptedBackup': userRef['backupPrivateRsaKey']['encryptedBackup']
+      });
 
-      // final store = new SecureStore();
-      // store.privateKeyRsa = privateRsaKey;
-      // store.publicKeyRsa = userRef['publicKeyRsa'];
-      // await Hive.box<SecureStore>('SecureStore').put('store', store);
-      
+      final store = new SecureStore();
+      store.privateKeyRsa = privateRsaKey;
+      store.publicKeyRsa = userRef['publicKeyRsa'];
+      await Hive.box<SecureStore>('SecureStore').put('store', store);
+
+      debugPrint(
+          'Login successfull pubkey - ${Hive.box<SecureStore>('SecureStore').get('store').publicKeyRsa}');
+
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -119,6 +136,10 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      Future.delayed(Duration.zero,
+          () => {Navigator.of(context).pushReplacementNamed('/home')});
+    }
     return FlutterLogin(
       title: 'AndroX',
       logo: Assets.logo,

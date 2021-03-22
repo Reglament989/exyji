@@ -2,6 +2,7 @@ import 'package:fl_andro_x/components/login.loader.dart';
 import 'package:fl_andro_x/hivedb/room.dart';
 import 'package:fl_andro_x/hivedb/secureStore.dart';
 import 'package:fl_andro_x/hivedb/settings.dart';
+import 'package:fl_andro_x/views/acceptInvite.view.dart';
 import 'package:fl_andro_x/views/chat.view.dart';
 import 'package:fl_andro_x/views/chatDetails.view.dart';
 import 'package:fl_andro_x/views/createChat.view.dart';
@@ -40,6 +41,13 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasError) {}
           if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp(
+              theme: ThemeData.from(colorScheme: ColorScheme.light()).copyWith(
+                pageTransitionsTheme: const PageTransitionsTheme(
+                  builders: <TargetPlatform, PageTransitionsBuilder>{
+                    TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                  },
+                ),
+              ),
               home: LoginView(),
               routes: <String, WidgetBuilder>{
                 HomeView.routeName: (BuildContext context) => HomeView(), // /home
@@ -49,6 +57,7 @@ class MyApp extends StatelessWidget {
                 InitView.routeName: (BuildContext context) => InitView(), // /init
                 InviteView.routeName: (BuildContext context) => InviteView(), // /invite
                 ChatDetailsView.routeName: (BuildContext context) => ChatDetailsView(), // /chat/details
+                AcceptInviteView.routeName: (BuildContext context) => AcceptInviteView(), // /invite/accept
               },
               initialRoute: InitView.routeName,
             );
