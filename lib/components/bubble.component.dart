@@ -5,14 +5,34 @@ class Bubble extends StatelessWidget {
   final String body;
   final String date;
   final bool isSender;
-  Bubble({@required this.body, @required this.date, @required this.isSender});
+  final bool isReply;
+  final String replyBody;
+  final String replyFrom;
+  final Function callbackReply;
+  final String uid;
+  Bubble({@required this.body, @required this.date, @required this.isSender, @required this.isReply, @required this.replyBody, @required this.replyFrom, @required  this.callbackReply, @required  this.uid});
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      actionExtentRatio: 0.13,
+      actionExtentRatio: 0.1,
       actionPane: SlidableScrollActionPane(),
-      secondaryActions: [Text(date)],
-      actions: [],
+      secondaryActions: [
+        IconSlideAction(
+          color: Colors.transparent,
+          iconWidget: Icon(Icons.reply_all_sharp, color: Theme.of(context).textTheme.headline1.color),
+          onTap: () => print('replyAll'),
+        ),
+        IconSlideAction(
+          color: Colors.transparent,
+          iconWidget: Icon(Icons.reply_sharp, color: Theme.of(context).textTheme.headline1.color),
+          onTap: () => callbackReply(uid: uid, replyBody: body),
+        ),
+      ],
+      actions: [
+        SlideAction(
+          child: Text(date, style: TextStyle(color: Theme.of(context).textTheme.headline1.color),),
+        ),
+      ],
       child: Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -24,12 +44,45 @@ class Bubble extends StatelessWidget {
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
+                boxShadow:  [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                    offset: Offset(0, 2), // changes position of shadow
+                  ),
+                ],
                   color: Colors.lightBlue[400],
                   border: Border.all(
                     color: Colors.lightBlue,
                   ),
                   borderRadius: BorderRadius.circular(15)),
-              child: Stack(
+              child: isReply ? Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                    decoration: BoxDecoration(
+                      border: Border(left: BorderSide(width: 2, color: Colors.black))
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(replyFrom),
+                        Text(replyBody)
+                      ],
+                    ),
+                  ),
+                  SelectableText(
+                    body,
+                    textAlign: TextAlign.left,
+                    textDirection: TextDirection.ltr,
+                    style: TextStyle(fontSize: 17, color: Colors.black),
+                  ),
+                ],
+              ) : Stack(
                 children: [
                   SelectableText(
                     body,
@@ -37,15 +90,6 @@ class Bubble extends StatelessWidget {
                     textDirection: TextDirection.ltr,
                     style: TextStyle(fontSize: 17, color: Colors.black),
                   ),
-                  // Positioned(
-                  //     bottom: 0,
-                  //     right: -14,
-                  //     child: Container(
-                  //       margin: isSender ? EdgeInsets.only(left: 140) : EdgeInsets.only(right: 140),
-                  //       child: Text(date,
-                  //           style:
-                  //               TextStyle(color: Colors.grey[800], fontSize: 12)),
-                  //     ))
                 ],
               ),
             )

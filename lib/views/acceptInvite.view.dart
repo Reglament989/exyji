@@ -59,6 +59,7 @@ class AcceptInviteViewState extends State<AcceptInviteView> {
             newHiveRoom.secretKeyVersion = decryptedSecretKey['secretKeyVersion'];
             newHiveRoom.secretKey = List<String>.from(decryptedSecretKey['secretKeys']);
             await Hive.box<Room>('Room').put(roomId, newHiveRoom);
+            await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser.uid).collection('rooms').doc(roomId).update({'backup': data['encryptedSharedSecret']});
             await roomRef.update({'successfull': true});
           }
         }

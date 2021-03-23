@@ -9,4 +9,13 @@ class Room extends HiveObject {
 
   @HiveField(1)
   int secretKeyVersion;
+
+  @HiveField(2)
+  String pathBackground;
+
+  @HiveField(3)
+  List messages = [];
+
+  @HiveField(4)
+  List existsMessages = [];
 }

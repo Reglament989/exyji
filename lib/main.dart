@@ -32,6 +32,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,14 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasError) {}
           if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp(
-              theme: ThemeData.from(colorScheme: ColorScheme.light()).copyWith(
+              theme: ThemeData.from(
+                      colorScheme: ColorScheme.light(
+                          primary: Colors.lightBlueAccent.shade200,
+                          secondary: Colors.lightBlueAccent.shade400,
+                      background: Colors.lightBlue.shade100),
+                      textTheme:
+                          TextTheme(headline1: TextStyle(color: Colors.white), headline2: TextStyle(color: Colors.black)))
+                  .copyWith(
                 pageTransitionsTheme: const PageTransitionsTheme(
                   builders: <TargetPlatform, PageTransitionsBuilder>{
                     TargetPlatform.android: ZoomPageTransitionsBuilder(),
@@ -50,14 +58,25 @@ class MyApp extends StatelessWidget {
               ),
               home: LoginView(),
               routes: <String, WidgetBuilder>{
-                HomeView.routeName: (BuildContext context) => HomeView(), // /home
-                LoginView.routeName: (BuildContext context) => LoginView(), // /login
-                CreateChatView.routeName: (BuildContext context) => CreateChatView(), // /createChat
-                ChatView.routeName: (BuildContext context) => ChatView(), // /chat
-                InitView.routeName: (BuildContext context) => InitView(), // /init
-                InviteView.routeName: (BuildContext context) => InviteView(), // /invite
-                ChatDetailsView.routeName: (BuildContext context) => ChatDetailsView(), // /chat/details
-                AcceptInviteView.routeName: (BuildContext context) => AcceptInviteView(), // /invite/accept
+                HomeView.routeName: (BuildContext context) => HomeView(),
+                // /home
+                LoginView.routeName: (BuildContext context) => LoginView(),
+                // /login
+                CreateChatView.routeName: (BuildContext context) =>
+                    CreateChatView(),
+                // /createChat
+                ChatView.routeName: (BuildContext context) => ChatView(),
+                // /chat
+                InitView.routeName: (BuildContext context) => InitView(),
+                // /init
+                InviteView.routeName: (BuildContext context) => InviteView(),
+                // /invite
+                ChatDetailsView.routeName: (BuildContext context) =>
+                    ChatDetailsView(),
+                // /chat/details
+                AcceptInviteView.routeName: (BuildContext context) =>
+                    AcceptInviteView(),
+                // /invite/accept
               },
               initialRoute: InitView.routeName,
             );

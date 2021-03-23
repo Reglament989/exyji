@@ -20,6 +20,8 @@ class Assets {
   static const circleLoader = 'lib/assets/lottie/circleLoader.json';
   static const userIcon = 'lib/assets/icons/user.png';
   static const timeLoader = 'lib/assets/lottie/timeLoader.json';
+  static const defaultChatBackground = 'lib/assets/defaultChatBackground.jpg';
+  static const dating = 'lib/assets/lottie/dating.json';
 }
 
 class AppRouter {

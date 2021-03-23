@@ -145,6 +145,7 @@ class InviteViewState extends State<InviteView> {
         if (data['publicKeySubject'] != null) {
           if (sended != true) {
             setState(() {
+              sended = true;
               _status = 'Public key recived encrypt...';
             });
             final roomSecret = Hive.box<Room>('Room').get(args.chatId);
@@ -163,7 +164,6 @@ class InviteViewState extends State<InviteView> {
             });
             setState(() {
               _status = 'Keys sended';
-              sended = true;
             });
             await Future.delayed(Duration(seconds: 1));
           }

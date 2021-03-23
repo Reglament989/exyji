@@ -20,6 +20,8 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:lottie/lottie.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ChatDetailsViewArguments {
   final String chatId;
@@ -61,6 +63,11 @@ class ChatDetailsViewState extends State<ChatDetailsView> {
       'traling': {'count': 0, 'icon': Icon(Icons.circle)}
     },
     {
+      'text': 'Change background',
+      'icon': Icon(Icons.gradient_rounded),
+      'traling': {'count': 0, 'icon': Icon(Icons.circle)}
+    },
+    {
       'text': 'Delete room',
       'icon': Icon(
         Icons.close,
@@ -86,7 +93,7 @@ class ChatDetailsViewState extends State<ChatDetailsView> {
         loading = true;
       });
       final File rawFile = File(result.files.single.path);
-      final newPhotoUrl = await compressAndPutIntoRef(
+      final newPhotoUrl = await compressImage(
           ref: '${Storage.roomsRef}${args.chatId}',
           rawFile: rawFile,
           returnUrl: true);
@@ -113,6 +120,24 @@ class ChatDetailsViewState extends State<ChatDetailsView> {
           .map((e) => e.data())
           .toList();
       secondaryType = SecondaryType.invites;
+    } else if (action == 'Change background') {
+      FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png'],
+      );
+      if (result != null) {
+        final File rawFile = File(result.files.single.path);
+        Directory appDocDir = await getApplicationDocumentsDirectory();
+        String targetPath = '${appDocDir.absolute.path}/${args.chatId}-background-${Uuid().v4()}.jpeg';
+        final backgroundImageFile = await compressImageAndSaveToFile(rawFile: rawFile, targetPath: targetPath);
+        debugPrint(backgroundImageFile.toString());
+        final roomDoc = Hive.box<Room>('Room').get(args.chatId);
+        if (roomDoc.pathBackground != null) {
+          await File(roomDoc.pathBackground).delete();
+        }
+        roomDoc.pathBackground = backgroundImageFile.path;
+        await Hive.box<Room>('Room').put(args.chatId, roomDoc);
+      }
     }
   }
 
@@ -224,9 +249,7 @@ class SecondaryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      separatorBuilder: (context, index) => Divider(
-        color: Colors.black,
-      ),
+      separatorBuilder: (context, index) => Container(padding: EdgeInsets.symmetric(vertical: 3),),
       itemCount: array.length,
       itemBuilder: (BuildContext ctx, idx) {
         final memberFuture = FirebaseFirestore.instance
@@ -278,7 +301,20 @@ class UserTile extends StatelessWidget {
               closeOnScroll: true,
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 5),
-                color: Colors.white,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Theme.of(context).colorScheme.background, Theme.of(context).colorScheme.background.withOpacity(0.8)]),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          blurRadius: 2
+                      )
+                    ],
+                    border: Border.all(width: 1.1, color: Colors.black.withOpacity(0.3)),
+                    borderRadius: BorderRadius.all(Radius.circular(5))
+                ),
                 child: ListTile(
                     title: Text(member['username']),
                     leading: Container(

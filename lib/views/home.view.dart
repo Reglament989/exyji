@@ -83,21 +83,11 @@ class HomeViewState extends State<HomeView> {
         direction: InnerDrawerDirection.end);
   }
 
-  Future<void> _signOut(context) async {
-    await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushReplacementNamed(AppRouter.login);
-  }
-
-  void _goToChat(int idx) {
-    print('Going to chat $idx');
-  }
-
   Query roomsStream = FirebaseFirestore.instance
       .collection('Users')
       .doc(FirebaseAuth.instance.currentUser.uid)
       .collection('rooms')
-      .orderBy('createdAt')
-      .orderBy('lastUpdatedAt');
+      .orderBy('createdAt');
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +102,15 @@ class HomeViewState extends State<HomeView> {
           return LoginLoader();
         }
 
+        final rooms = snapshot.data.docs.reversed.toList();
+
         return InnerDrawer(
             key: _innerDrawerKey,
             onTapClose: true,
             // default false
             swipe: true,
             // default true
-            colorTransitionChild: Colors.red,
+            colorTransitionChild: Colors.purple[300],
             // default Color.black54
             colorTransitionScaffold: Colors.black54,
             // default Color.black54
@@ -136,7 +128,7 @@ class HomeViewState extends State<HomeView> {
             // default static
             rightAnimationType: InnerDrawerAnimation.quadratic,
             backgroundDecoration: BoxDecoration(
-                gradient: LinearGradient(colors: [Colors.red, Colors.orange])),
+                gradient: LinearGradient(colors: [Theme.of(context).colorScheme.background, Theme.of(context).colorScheme.secondary])),
             // default  Theme.of(context).backgroundColor
 
             //when a pointer that is in contact with the screen and moves to the right or left
@@ -164,13 +156,13 @@ class HomeViewState extends State<HomeView> {
                   height: 50,
                   color: Colors.white,
                   buttonBackgroundColor: Colors.white,
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: Theme.of(context).colorScheme.background,
                   animationCurve: Curves.easeInOut,
                   animationDuration: Duration(milliseconds: 600),
                   items: <Widget>[
-                    Icon(Icons.add, size: 30),
-                    Icon(Icons.list, size: 30),
-                    Icon(Icons.compare_arrows, size: 30),
+                    Icon(Icons.account_circle_outlined, size: 30),
+                    Icon(Icons.favorite_border, size: 30),
+                    Icon(Icons.work_outline, size: 30),
                   ],
                   onTap: (index) {
                     //Handle button tap
@@ -186,89 +178,133 @@ class HomeViewState extends State<HomeView> {
                       ringWidth: 80,
                       animationCurve: Curves.easeInOutQuint,
                       animationDuration: Duration(milliseconds: 500),
-                        children: <Widget>[
-                          IconButton(icon: Icon(Icons.edit), onPressed: () async {
-                            final roomDefaultPhotoUrl = await firebase_storage
-                                .FirebaseStorage.instance
-                                .ref(Storage.defaultUserPhoto)
-                                .getDownloadURL();
-                            Navigator.of(context).pushNamed(AppRouter.createChat,
-                                arguments:
-                                CreateChatViewArguments(roomDefaultPhotoUrl));
-                          }),
-                          IconButton(icon: Icon(Icons.search), onPressed: () {
-                            Navigator.of(context).pushNamed(AppRouter.acceptInvite);
-                          })
-                        ]
-                    ),
+                      children: <Widget>[
+                        IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              final roomDefaultPhotoUrl = await firebase_storage
+                                  .FirebaseStorage.instance
+                                  .ref(Storage.defaultUserPhoto)
+                                  .getDownloadURL();
+                              Navigator.of(context).pushNamed(
+                                  AppRouter.createChat,
+                                  arguments: CreateChatViewArguments(
+                                      roomDefaultPhotoUrl));
+                            }),
+                        IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(AppRouter.acceptInvite);
+                            })
+                      ]),
                 ),
                 body: Container(
-                    child: snapshot.data.docs.length > 0
-                        ? ListView.separated(
-                            separatorBuilder: (context, index) => Divider(
-                                  height: 3,
-                                  color: Colors.black,
-                                ),
-                            itemCount: snapshot.data.docs.length,
+                    child: rooms.length > 0
+                        ? ListView.builder(
+                            itemCount: rooms.length,
                             controller: _hideButtonController,
                             itemBuilder: (ctx, idx) {
-                              final room = snapshot.data.docs[idx].data();
+                              final room = rooms[idx].data();
                               return GestureDetector(
                                   onTap: () => {
                                         Navigator.of(context).pushNamed(
                                             AppRouter.chat,
                                             arguments: ChatViewArguments(
-                                                chatId: snapshot.data.docs[idx]
+                                                chatId: rooms[idx]
                                                     .data()['chatId']))
                                       },
-                                  child: Slidable(
-                                    actionPane: SlidableBehindActionPane(),
-                                    actions: <Widget>[
-                                      IconSlideAction(
-                                        caption: 'To Favourites',
-                                        color: Colors.red[400],
-                                        icon: Icons.favorite,
-                                      ),
-                                      IconSlideAction(
-                                          caption: 'About',
-                                          color: Colors.blue,
-                                          icon: Icons.info_outline),
-                                    ],
-                                    secondaryActions: [
-                                      IconSlideAction(
-                                        caption: 'Archive',
-                                        color: Colors.cyan,
-                                        icon: Icons.archive,
-                                      ),
-                                      IconSlideAction(
-                                          caption: 'Mute',
-                                          color: Colors.grey,
-                                          icon: Icons.notifications_off),
-                                    ],
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: ListTile(
-                                        title: Text(room['roomName']),
-                                        subtitle: Text('last message'),
-                                        leading: Container(
-                                          width: 52,
-                                          height: 52,
-                                          child: CircleCachedImage(
-                                              imageUrl: room['avatar'],
-                                              placeholder: Container(
-                                                  width: 52,
-                                                  height: 52,
-                                                  child: Lottie.asset(
-                                                      Assets.circleLoader))),
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 3, vertical: 2),
+                                    child: Slidable(
+                                      actionPane: SlidableBehindActionPane(),
+                                      actions: <Widget>[
+                                        IconSlideAction(
+                                          caption: 'To Favourites',
+                                          color: Colors.red[400],
+                                          icon: Icons.favorite,
                                         ),
-                                        trailing: Icon(Icons.circle),
+                                        IconSlideAction(
+                                            caption: 'About',
+                                            color: Colors.blue,
+                                            icon: Icons.info_outline),
+                                      ],
+                                      secondaryActions: [
+                                        IconSlideAction(
+                                          caption: 'Archive',
+                                          color: Colors.cyan,
+                                          icon: Icons.archive,
+                                        ),
+                                        IconSlideAction(
+                                            caption: 'Mute',
+                                            color: Colors.grey,
+                                            icon: Icons.notifications_off),
+                                      ],
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [Theme.of(context).colorScheme.background, Theme.of(context).colorScheme.secondary]),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.black.withOpacity(0.5),
+                                                  blurRadius: 2
+                                              )
+                                            ],
+                                            border: Border.all(width: 1.1, color: Colors.black.withOpacity(0.3)),
+                                            borderRadius: BorderRadius.all(Radius.circular(5))
+                                        ),
+                                        child: ListTile(
+                                          title: Text(room['roomName']),
+                                          subtitle: Text('last message'),
+                                          leading: Container(
+                                            width: 52,
+                                            height: 52,
+                                            child: CircleCachedImage(
+                                                imageUrl: room['avatar'],
+                                                placeholder: Container(
+                                                    width: 52,
+                                                    height: 52,
+                                                    child: Lottie.asset(
+                                                        Assets.circleLoader))),
+                                          ),
+                                          trailing: Icon(Icons.circle),
+                                        ),
                                       ),
                                     ),
                                   ));
                             })
                         : Center(
-                            child:
-                                Text("Just hold on plus for creating new room"),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text("Lets go to chatting!"),
+                                  Stack(
+                                    children: [
+                                      Lottie.asset(Assets.dating,
+                                          width: 500, height: 500),
+                                      Container(
+                                        width: 500,
+                                        height: 500,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(width: 20, color: Color(0xFF7ed7ff))),
+                                      ),
+                                      Container(
+                                        width: 500,
+                                        height: 500,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(width: 20, color: Color(0xFF7ed7ff)),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50))),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
                           ))));
       },
     );
@@ -305,8 +341,8 @@ class LeftMenuDrawerState extends State<LeftMenuDrawer> {
         final File rawFile = File(result.files.single.path);
         final ref =
             '${Storage.avatarsRef}${FirebaseAuth.instance.currentUser.uid}';
-        final avatarUrl = await compressAndPutIntoRef(
-            ref: ref, rawFile: rawFile, returnUrl: true);
+        final avatarUrl =
+            await compressImage(ref: ref, rawFile: rawFile, returnUrl: true);
         await FirebaseAuth.instance.currentUser
             .updateProfile(photoURL: avatarUrl);
         await FirebaseFirestore.instance
@@ -329,6 +365,7 @@ class LeftMenuDrawerState extends State<LeftMenuDrawer> {
         body: SafeArea(
           child: Container(
               alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -405,7 +442,7 @@ class ItemLeftMenuDrawer extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (BuildContext ctx) => AlertDialog(
-            elevation: 24,
+                  elevation: 24,
                   title: Text('About - Andro X'),
                   content: Text(
                       'The small chat application development of student 17yo on flutter and this chat dreaming be most expandable and most customizable'),

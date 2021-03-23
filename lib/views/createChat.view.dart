@@ -58,6 +58,7 @@ class CreateChatViewState extends State<CreateChatView> {
       final Room room = new Room();
       room.secretKey = List.of([secretRoom]);
       room.secretKeyVersion = 0;
+      room.messages = [];
       await Hive.box<Room>('Room').put(newRoom.id, room);
       Navigator.pushReplacementNamed(context, '/chat',
           arguments: ChatViewArguments(chatId: newRoom.id)); //argumetns: ???
@@ -85,7 +86,7 @@ class CreateChatViewState extends State<CreateChatView> {
   Future _getRoomAvatar(roomId) async {
     if (roomAvatar != null) {
       final ref = '${Storage.roomsRef}/$roomId';
-      return await compressAndPutIntoRef(
+      return await compressImage(
           ref: ref, rawFile: roomAvatar, returnUrl: true);
     } else {
       return args.roomDefaultPhotoUrl;
@@ -116,8 +117,8 @@ class CreateChatViewState extends State<CreateChatView> {
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
     args = ModalRoute.of(context).settings.arguments;
+    super.didChangeDependencies();
   }
 
   @override

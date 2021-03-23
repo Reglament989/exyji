@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fl_andro_x/constants.dart';
+import 'package:fl_andro_x/hivedb/room.dart';
 import 'package:fl_andro_x/hivedb/secureStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,6 +105,18 @@ class LoginView extends StatelessWidget {
       store.privateKeyRsa = privateRsaKey;
       store.publicKeyRsa = userRef['publicKeyRsa'];
       await Hive.box<SecureStore>('SecureStore').put('store', store);
+
+      final rooms = (await FirebaseFirestore.instance.collection('Users').doc(auth.currentUser.uid).collection('rooms').get()).docs;
+
+      for (final room in rooms) {
+        final secureStore = Hive.box<SecureStore>('SecureStore').get('store');
+        final privateRsa = secureStore.privateKeyRsa;
+        final decryptedSecretKey = json.decode(await platform.invokeMethod('decryptRoomSecret', {'roomSecretEncrypted': room['backup'], 'rsaPrivateKey': privateRsa}));
+        final newHiveRoom = new Room();
+        newHiveRoom.secretKeyVersion = decryptedSecretKey['secretKeyVersion'];
+        newHiveRoom.secretKey = List<String>.from(decryptedSecretKey['secretKeys']);
+        await Hive.box<Room>('Room').put(room.id, newHiveRoom);
+      }
 
       debugPrint(
           'Login successfull pubkey - ${Hive.box<SecureStore>('SecureStore').get('store').publicKeyRsa}');
