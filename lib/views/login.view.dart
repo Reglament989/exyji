@@ -109,13 +109,15 @@ class LoginView extends StatelessWidget {
       final rooms = (await FirebaseFirestore.instance.collection('Users').doc(auth.currentUser.uid).collection('rooms').get()).docs;
 
       for (final room in rooms) {
-        final secureStore = Hive.box<SecureStore>('SecureStore').get('store');
-        final privateRsa = secureStore.privateKeyRsa;
-        final decryptedSecretKey = json.decode(await platform.invokeMethod('decryptRoomSecret', {'roomSecretEncrypted': room['backup'], 'rsaPrivateKey': privateRsa}));
-        final newHiveRoom = new Room();
-        newHiveRoom.secretKeyVersion = decryptedSecretKey['secretKeyVersion'];
-        newHiveRoom.secretKey = List<String>.from(decryptedSecretKey['secretKeys']);
-        await Hive.box<Room>('Room').put(room.id, newHiveRoom);
+        if (room['backup'] != null) {
+          final secureStore = Hive.box<SecureStore>('SecureStore').get('store');
+          final privateRsa = secureStore.privateKeyRsa;
+          final decryptedSecretKey = json.decode(await platform.invokeMethod('decryptRoomSecret', {'roomSecretEncrypted': room['backup'], 'rsaPrivateKey': privateRsa}));
+          final newHiveRoom = new Room();
+          newHiveRoom.secretKeyVersion = decryptedSecretKey['secretKeyVersion'];
+          newHiveRoom.secretKey = List<String>.from(decryptedSecretKey['secretKeys']);
+          await Hive.box<Room>('Room').put(room.id, newHiveRoom);
+        }
       }
 
       debugPrint(

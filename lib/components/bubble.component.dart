@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Bubble extends StatelessWidget {
   final String body;
@@ -58,41 +60,54 @@ class Bubble extends StatelessWidget {
                     color: Colors.lightBlue,
                   ),
                   borderRadius: BorderRadius.circular(15)),
-              child: isReply ? Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                    decoration: BoxDecoration(
-                      border: Border(left: BorderSide(width: 2, color: Colors.black))
-                    ),
-                    child: Column(
+              child: isReply
+                  ? Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(replyFrom),
-                        Text(replyBody)
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(
+                                      width: 2, color: Colors.black))),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [Text(replyFrom), Text(replyBody)],
+                          ),
+                        ),
+                        SelectableLinkify(
+                          onOpen: (link) async {
+                            if (await canLaunch(link.url)) {
+                              await launch(link.url);
+                            }
+                          },
+                          text: body,
+                          textAlign: TextAlign.left,
+                          textDirection: TextDirection.ltr,
+                          style: TextStyle(fontSize: 17, color: Colors.black),
+                          linkStyle: TextStyle(color: Colors.red),
+                        )
+                      ],
+                    )
+                  : Stack(
+                      children: [
+                        SelectableLinkify(
+                          onOpen: (link) async {
+                            if (await canLaunch(link.url)) {
+                              await launch(link.url);
+                            }
+                          },
+                          text: body,
+                          textAlign: TextAlign.left,
+                          textDirection: TextDirection.ltr,
+                          style: TextStyle(fontSize: 17, color: Colors.black),
+                          linkStyle: TextStyle(color: Colors.red),
+                        ),
                       ],
                     ),
-                  ),
-                  SelectableText(
-                    body,
-                    textAlign: TextAlign.left,
-                    textDirection: TextDirection.ltr,
-                    style: TextStyle(fontSize: 17, color: Colors.black),
-                  ),
-                ],
-              ) : Stack(
-                children: [
-                  SelectableText(
-                    body,
-                    textAlign: TextAlign.start,
-                    textDirection: TextDirection.ltr,
-                    style: TextStyle(fontSize: 17, color: Colors.black),
-                  ),
-                ],
-              ),
             )
           ],
         ),

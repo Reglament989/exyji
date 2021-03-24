@@ -41,6 +41,8 @@ dependencies:
   flex_color_picker: ^1.1.5
   provider: ^4.0.2
   jitsi_meet: ^2.0.0
+  flutter_linkify: ^4.0.2
+  url_launcher: ^6.0.2
 
   firebase_core: "^1.0.1"
   firebase_auth: "^1.0.1"

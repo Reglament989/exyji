@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,7 @@ import 'package:fl_andro_x/components/circleCachedImage.component.dart';
 import 'package:fl_andro_x/components/fullscreenLoader.dart';
 import 'package:fl_andro_x/constants.dart';
 import 'package:fl_andro_x/hivedb/room.dart';
+import 'package:fl_andro_x/hivedb/secureStore.dart';
 import 'package:fl_andro_x/utils/images.utils.dart';
 import 'package:fl_andro_x/views/chat.view.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +61,15 @@ class CreateChatViewState extends State<CreateChatView> {
       room.secretKey = List.of([secretRoom]);
       room.secretKeyVersion = 0;
       room.messages = [];
+      final backupSecret = await platform.invokeMethod('encryptRoomSecret', {
+        'roomSecret': json.encode({
+          'secretKey': room.secretKey,
+          'secretKeyVersion': room.secretKeyVersion
+        }),
+        'rsaPublicKey':
+            Hive.box<SecureStore>('SecureStore').get('store').publicKeyRsa
+      });
+      await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser.uid).collection('rooms').doc(newRoom.id).set({'backup': backupSecret});
       await Hive.box<Room>('Room').put(newRoom.id, room);
       Navigator.pushReplacementNamed(context, '/chat',
           arguments: ChatViewArguments(chatId: newRoom.id)); //argumetns: ???
