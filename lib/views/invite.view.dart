@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:fl_andro_x/constants.dart';
 import 'package:fl_andro_x/hivedb/room.dart';
 import 'package:fl_andro_x/views/chat.view.dart';

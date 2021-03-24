@@ -27,6 +27,15 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    ndkVersion "23.0.7123448-rc1"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions { 
+        checkReleaseBuilds false
+    }
+    
     packagingOptions {
         exclude "DebugProbesKt.bin"
     }
@@ -48,6 +57,9 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug

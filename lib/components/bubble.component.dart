@@ -4,13 +4,14 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class Bubble extends StatelessWidget {
   final String body;
   final String date;
+  final sender;
   final bool isSender;
   final bool isReply;
   final String replyBody;
   final String replyFrom;
   final Function callbackReply;
   final String uid;
-  Bubble({@required this.body, @required this.date, @required this.isSender, @required this.isReply, @required this.replyBody, @required this.replyFrom, @required  this.callbackReply, @required  this.uid});
+  Bubble({@required this.body, @required this.date, @required this.isSender, @required this.isReply, @required this.replyBody, @required this.replyFrom, @required  this.callbackReply, @required  this.uid, @required this.sender});
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -25,7 +26,7 @@ class Bubble extends StatelessWidget {
         IconSlideAction(
           color: Colors.transparent,
           iconWidget: Icon(Icons.reply_sharp, color: Theme.of(context).textTheme.headline1.color),
-          onTap: () => callbackReply(uid: uid, replyBody: body),
+          onTap: () => callbackReply(uid: uid, replyBody: body, replyFromBody: sender),
         ),
       ],
       actions: [

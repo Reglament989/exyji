@@ -16,11 +16,8 @@ import 'package:fl_andro_x/views/login.view.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:cryptography_flutter/cryptography_flutter.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FlutterCryptography.enable();
   Hive.registerAdapter(GlobalSettingsAdapter());
   Hive.registerAdapter(SecureStoreAdapter());
   Hive.registerAdapter(RoomAdapter());

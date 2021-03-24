@@ -21,13 +21,14 @@ class RoomAdapter extends TypeAdapter<Room> {
       ..secretKeyVersion = fields[1] as int
       ..pathBackground = fields[2] as String
       ..messages = (fields[3] as List)?.cast<dynamic>()
-      ..existsMessages = (fields[4] as List)?.cast<dynamic>();
+      ..existsMessages = (fields[4] as List)?.cast<dynamic>()
+      ..lastInput = fields[5] as String;
   }
 
   @override
   void write(BinaryWriter writer, Room obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.secretKey)
       ..writeByte(1)
@@ -37,7 +38,9 @@ class RoomAdapter extends TypeAdapter<Room> {
       ..writeByte(3)
       ..write(obj.messages)
       ..writeByte(4)
-      ..write(obj.existsMessages);
+      ..write(obj.existsMessages)
+      ..writeByte(5)
+      ..write(obj.lastInput);
   }
 
   @override

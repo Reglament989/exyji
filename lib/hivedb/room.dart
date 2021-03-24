@@ -18,4 +18,7 @@ class Room extends HiveObject {
 
   @HiveField(4)
   List existsMessages = [];
+
+  @HiveField(5)
+  String lastInput = '';
 }
