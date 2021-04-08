@@ -1,41 +1,19 @@
-import 'package:fl_andro_x/views/acceptInvite.view.dart';
-import 'package:fl_andro_x/views/chat.view.dart';
-import 'package:fl_andro_x/views/chatDetails.view.dart';
-import 'package:fl_andro_x/views/createChat.view.dart';
-import 'package:fl_andro_x/views/home.view.dart';
-import 'package:fl_andro_x/views/invite.view.dart';
-import 'package:fl_andro_x/views/login.view.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/painting.dart';
 
-const serverUrl = kReleaseMode ? '' : 'http://192.168.239.141:8083';
+const dBackgroundColorsForGradient = [Color(0xFF2BED80), Color(0xFF34A1E0)];
 
-class Storage {
-  static const defaultUserPhoto = 'defaults/user.png';
-  static const avatarsRef = 'users/avatars/';
-  static const roomsRef = 'rooms/avatars/';
-}
+const dDarkPurple = Color(0xFF5E2BED);
 
-class Assets {
-  static const logo = 'lib/assets/icons/logo.png';
-  static const circleLoader = 'lib/assets/lottie/circleLoader.json';
-  static const userIcon = 'lib/assets/icons/user.png';
-  static const timeLoader = 'lib/assets/lottie/timeLoader.json';
-  static const defaultChatBackground = 'lib/assets/defaultChatBackground.jpg';
-  static const dating = 'lib/assets/lottie/dating.json';
-}
+const dBlue = Color(0xFF365BF7);
+
+const dLigthBlue = Color(0xFF34A1E0);
+
+const dLigthGreen = Color(0xFF2BED80);
+
+const dPadding = 14.0;
 
 class AppRouter {
-  static final home = HomeView.routeName;
-  static final login = LoginView.routeName;
-  static final createChat = CreateChatView.routeName;
-  static final chat = ChatView.routeName;
-  static final invite = InviteView.routeName;
-  static final chatDetails = ChatDetailsView.routeName;
-  static final acceptInvite = AcceptInviteView.routeName;
-}
-
-enum RoomType {
-  contact,
-  chat,
-  channel
+  static const discover = "discover";
+  static const login = "login";
+  static const home = "home";
 }
