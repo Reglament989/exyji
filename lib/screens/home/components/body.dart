@@ -1,3 +1,4 @@
+import 'package:fl_reload/screens/home/components/page.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatelessWidget {
@@ -19,18 +20,10 @@ class Body extends StatelessWidget {
         controller: _pageController,
         onPageChanged: (index) => updateIndex(index),
         children: <Widget>[
-          Container(
-            color: Colors.blueGrey,
-          ),
-          Container(
-            color: Colors.red,
-          ),
-          Container(
-            color: Colors.green,
-          ),
-          Container(
-            color: Colors.blue,
-          ),
+          BodyPage(),
+          BodyPage(),
+          BodyPage(),
+          BodyPage(),
         ],
       ),
     );

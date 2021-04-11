@@ -34,7 +34,13 @@ class HeaderAndInputs extends StatelessWidget {
                     color: Colors.white.withOpacity(0.7),
                     fontWeight: FontWeight.w600),
               ),
-              TextField()
+              TextField(
+                decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.lime.withOpacity(0.6), width: 2.0),
+                )),
+              )
             ],
           ),
         ),
@@ -47,7 +53,12 @@ class HeaderAndInputs extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontWeight: FontWeight.w600)),
-              TextField()
+              TextField(
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Colors.lime.withOpacity(0.6), width: 2.0),
+              )))
             ],
           ),
         ),

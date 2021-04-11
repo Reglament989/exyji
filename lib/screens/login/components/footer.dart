@@ -12,19 +12,19 @@ class Footer extends StatelessWidget {
       children: [
         Text(
           "Not have account? Sign up >",
-          style: TextStyle(fontSize: 13, color: Colors.black.withOpacity(0.5)),
+          style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.7)),
         ),
         Row(
           children: [
             Text("Change server",
                 style: TextStyle(
-                    fontSize: 13, color: Colors.black.withOpacity(0.5))),
+                    fontSize: 13, color: Colors.white.withOpacity(0.7))),
             IconButton(
                 onPressed: () {},
                 icon: Icon(
                   Icons.info,
                   size: 18,
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.white.withOpacity(0.6),
                 ))
           ],
         )
