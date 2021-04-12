@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:uuid/uuid.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 const uuid = Uuid();
 
@@ -15,7 +16,7 @@ class BodyPage extends StatelessWidget {
                 key: Key(uuid.v4()),
                 title: "Hello",
                 subtitle: "How are you?",
-                icon: Icons.home,
+                icon: "https://source.unsplash.com/random/56x56",
               )),
     );
   }
@@ -23,8 +24,7 @@ class BodyPage extends StatelessWidget {
 
 class ListItem extends StatelessWidget {
   final ctx, idx;
-  final String title, subtitle;
-  final IconData icon;
+  final String title, subtitle, icon;
 
   const ListItem(
       {Key? key,
@@ -47,7 +47,7 @@ class ListItem extends StatelessWidget {
             width: 56,
             height: 56,
             child: Center(
-              child: Icon(icon),
+              child: ,
             ),
           ),
         ),
