@@ -29,7 +29,7 @@ class HeaderAndInputs extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "\tUsername",
+                "Username",
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.7),
                     fontWeight: FontWeight.w600),
@@ -49,7 +49,7 @@ class HeaderAndInputs extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("\tPassword",
+              Text("Password",
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontWeight: FontWeight.w600)),
