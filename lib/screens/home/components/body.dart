@@ -20,10 +20,10 @@ class Body extends StatelessWidget {
         controller: _pageController,
         onPageChanged: (index) => updateIndex(index),
         children: <Widget>[
-          BodyPage(),
-          BodyPage(),
-          BodyPage(),
-          BodyPage(),
+          BodyPage(), // All
+          BodyPage(), // Contacts
+          BodyPage(), // Channels
+          BodyPage(), // Bots
         ],
       ),
     );

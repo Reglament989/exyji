@@ -1,5 +1,7 @@
+import 'package:animations/animations.dart';
 import 'package:fl_reload/screens/home/components/body.dart';
 import 'package:fl_reload/screens/home/components/bottom_navy.dart';
+import 'package:fl_reload/screens/home/components/create_chat_menu.dart';
 import 'package:fl_reload/screens/home/components/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
@@ -37,14 +39,23 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text("Home")),
       drawer: HomeDrawer(),
       floatingActionButton: FabCircularMenu(
+          key: fabKey,
           ringDiameter: 240,
           ringWidth: 70,
           fabSize: 52,
           children: <Widget>[
-            IconButton(
-                icon: Icon(Icons.home),
-                onPressed: () {
-                  print('Home');
+            OpenContainer(
+                closedColor: Colors.transparent,
+                closedElevation: 0,
+                openColor: Colors.transparent,
+                openElevation: 0,
+                onClosed: (Object? _) {
+                  fabKey.currentState?.close();
+                },
+                closedBuilder: (BuildContext ctx, VoidCallback _) =>
+                    Icon(Icons.create),
+                openBuilder: (BuildContext ctx, VoidCallback _) {
+                  return CreateChatMenu();
                 }),
             IconButton(
                 icon: Icon(Icons.favorite),

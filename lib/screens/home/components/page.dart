@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -9,7 +8,14 @@ class BodyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListView.builder(
+      child: ListView.separated(
+          itemCount: 20,
+          separatorBuilder: (BuildContext ctx, idx) => Divider(
+                indent: 64,
+                endIndent: 18,
+                height: 1,
+                color: Colors.black.withOpacity(0.6),
+              ),
           itemBuilder: (BuildContext ctx, idx) => ListItem(
                 ctx: ctx,
                 idx: idx,
@@ -37,34 +43,25 @@ class ListItem extends StatelessWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-        key: key,
-        actionPane: SlidableScrollActionPane(),
-        child: ListTile(
-          title: Text(title),
-          subtitle: Text(subtitle),
-          leading: Container(
-            width: 56,
-            height: 56,
-            child: Center(
-              child: ,
+    return ListTile(
+        title: Text(title),
+        subtitle: Text(subtitle),
+        leading: Container(
+          width: 56,
+          height: 56,
+          child: Center(
+            child: CachedNetworkImage(
+              imageUrl: icon,
+              imageBuilder: (ctx, imageProvider) => Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    )),
+              ),
             ),
           ),
-        ),
-        closeOnScroll: true,
-        // actions: [
-        //   IconSlideAction(
-        //     caption: "hello",
-        //     icon: Icons.access_time,
-        //   )
-        // ],
-        dismissal: SlidableDismissal(
-            child: SlidableDrawerDismissal(),
-            onDismissed: (actionType) {
-              print(actionType);
-            },
-            dismissThresholds: <SlideActionType, double>{
-              SlideActionType.primary: 0.2
-            }));
+        ));
   }
 }

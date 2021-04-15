@@ -38,7 +38,7 @@ class HeaderAndInputs extends StatelessWidget {
                 decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color: Colors.lime.withOpacity(0.6), width: 2.0),
+                      color: Colors.lime.withOpacity(0.7), width: 2.0),
                 )),
               )
             ],
@@ -57,7 +57,7 @@ class HeaderAndInputs extends StatelessWidget {
                   decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                 borderSide:
-                    BorderSide(color: Colors.lime.withOpacity(0.6), width: 2.0),
+                    BorderSide(color: Colors.lime.withOpacity(0.7), width: 2.0),
               )))
             ],
           ),
@@ -68,8 +68,8 @@ class HeaderAndInputs extends StatelessWidget {
               onPressed: () => _signIn(context),
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18)),
-                  primary: Colors.deepPurple.withOpacity(0.8)),
+                      borderRadius: BorderRadius.circular(30)),
+                  primary: Colors.blue),
               child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: dPadding * 2, vertical: dPadding),

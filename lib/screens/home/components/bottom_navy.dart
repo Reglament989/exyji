@@ -26,11 +26,30 @@ class BottomNavy extends StatelessWidget {
             duration: Duration(milliseconds: 300), curve: Curves.ease);
       },
       items: <BottomNavyBarItem>[
-        BottomNavyBarItem(title: Text('Item One'), icon: Icon(Icons.home)),
-        BottomNavyBarItem(title: Text('Item Two'), icon: Icon(Icons.apps)),
         BottomNavyBarItem(
-            title: Text('Item Three'), icon: Icon(Icons.chat_bubble)),
-        BottomNavyBarItem(title: Text('Item Four'), icon: Icon(Icons.settings)),
+            title: Text(
+              'All',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(Icons.home)),
+        BottomNavyBarItem(
+            title: Text(
+              'Contacts',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(Icons.apps)),
+        BottomNavyBarItem(
+            title: Text(
+              'Channels',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(Icons.chat_bubble)),
+        BottomNavyBarItem(
+            title: Text(
+              'Bots',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(Icons.settings)),
       ],
     );
   }

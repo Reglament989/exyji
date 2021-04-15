@@ -16,4 +16,9 @@ class AppRouter {
   static const discover = "discover";
   static const login = "login";
   static const home = "home";
+  static const chatDetails = "chat/details";
+}
+
+class Assets {
+  static const flasksAnimation = "assets/lottie/flasks.json";
 }
