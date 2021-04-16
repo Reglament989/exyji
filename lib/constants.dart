@@ -24,5 +24,6 @@ class Assets {
 }
 
 class Config {
-  static const double drawerHeight = 180;
+  static const double drawerHeight = 190;
+  static const double drawerAvatarSize = 80;
 }

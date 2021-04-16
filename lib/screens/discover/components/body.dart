@@ -44,21 +44,21 @@ class _BodyState extends State<Body> {
             isSkiped: true,
           ),
           DiscoverScreen(
-            header: "Flex options",
+            header: "We have support Open Source",
             lorem:
-                "You can setup any of this application, beggining colors ended forms, position etc.",
+                "All sources avalible on notabug, and can be reviewed. No secrets for users, only magic",
             lottieAsset: Assets.flasksAnimation,
             backgroundColor: Colors.cyan.withOpacity(0.5),
             nextScreen: this.nextScreen,
           ),
           DiscoverScreen(
-            header: "Flex options",
+            header: "Fully encryption",
             lorem:
-                "You can setup any of this application, beggining colors ended forms, position etc.",
+                "All data stored on client, server work on message broker, he just delivered your message to others",
             lottieAsset: Assets.flasksAnimation,
             backgroundColor: Colors.cyan.withOpacity(0.5),
             nextScreen: this.nextScreen,
-            buttonTitle: "Lets go to adventures",
+            buttonTitle: "Let's go to a meeting experiments",
           ),
         ],
       ),

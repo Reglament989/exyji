@@ -30,8 +30,11 @@ class FileApi {
             (String? filePath) async => await File(filePath!).readAsBytes());
         return files;
       }
-      final PlatformFile plFile = result.files.first;
-      return List.of([plFile.bytes!]);
+      if (result.files.single.path != null) {
+        final String path = result.files.single.path as String;
+        final File rawFile = File(path);
+        return List.of([await rawFile.readAsBytes()]);
+      }
     }
   }
 }

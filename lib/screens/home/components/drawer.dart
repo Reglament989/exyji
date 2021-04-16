@@ -35,6 +35,7 @@ class HomeDrawer extends StatelessWidget {
     ];
     return Drawer(
       child: ListView.separated(
+          padding: EdgeInsets.zero,
           itemBuilder: (BuildContext ctx, int idx) => DrawerItem(
               ctx: ctx,
               title: drawerItems[idx].title,
@@ -76,10 +77,10 @@ class DrawerItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Container(
-                width: 100,
-                height: 100,
+                width: Config.drawerAvatarSize,
+                height: Config.drawerAvatarSize,
                 decoration: BoxDecoration(
                   color: Colors.amber,
                   border: Border.all(),
