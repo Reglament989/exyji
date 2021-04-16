@@ -22,3 +22,7 @@ class AppRouter {
 class Assets {
   static const flasksAnimation = "assets/lottie/flasks.json";
 }
+
+class Config {
+  static const double drawerHeight = 180;
+}

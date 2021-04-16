@@ -49,7 +49,8 @@ class DiscoverScreen extends StatelessWidget {
                         style: TextStyle(color: Colors.white.withOpacity(0.9)),
                       ),
                       onPressed: () {
-                        nextScreen();
+                        Navigator.of(context)
+                            .pushReplacementNamed(AppRouter.home);
                       },
                     ),
                   )

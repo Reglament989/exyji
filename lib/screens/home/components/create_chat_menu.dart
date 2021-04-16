@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:fl_reload/helpers/file_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
@@ -14,7 +16,7 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
   final roomDescriptionController = TextEditingController();
   bool loading = false;
   bool _roomUpdate = false;
-  File? roomAvatar;
+  Uint8List? roomAvatar;
 
   @override
   void dispose() {
@@ -32,24 +34,18 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
   }
 
   Future _changeRoomPhoto() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png'],
-    );
-    if (result != null && result.files.single.path != null) {
-      final String path = result.files.single.path as String;
-      final File rawFile = File(path);
-      setState(() {
-        roomAvatar = rawFile;
-      });
-    }
+    final rawFile =
+        await FileApi.pick(extensions: ['jpg', 'png']);
+    setState(() {
+      roomAvatar = rawFile!.first;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New room.'),
+        title: Text('New room'),
       ),
       body: Container(
         alignment: Alignment.center,
@@ -68,8 +64,8 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: FileImage(roomAvatar as File),
-                                  fit: BoxFit.fill,
+                                  image: Image.memory(roomAvatar!).image,
+                                  fit: BoxFit.cover,
                                 )),
                           )
                         : Container(
@@ -111,18 +107,13 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
                   alignment: Alignment.center,
                   width: 200,
                   height: 65,
-                  child: OutlinedButton(
+                  child: ElevatedButton.icon(
                     onPressed: () => {},
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Create new room.'),
-                          Icon(Icons.create),
-                        ]),
-                    style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.all(8),
+                    label: Text('Create', style: TextStyle(fontSize: 16),),
+                    icon: Icon(Icons.create),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                       shape: StadiumBorder(),
-                      side: BorderSide(width: 2, color: Colors.indigo),
                     ),
                   ),
                 ),

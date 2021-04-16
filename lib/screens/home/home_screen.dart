@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void updateIndex(index) {
+    fabKey.currentState?.close();
     setState(() => _currentIndex = index);
   }
 
