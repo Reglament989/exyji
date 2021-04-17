@@ -50,6 +50,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   bottom_navy_bar: ^6.0.0
   file_picker: ^3.0.1
+  intl: ^0.17.0
+  cryptography: ^2.0.1
+  cryptography_flutter: ^2.0.0
 
 dev_dependencies:
   hive_generator: ^1.0.1

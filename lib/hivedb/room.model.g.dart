@@ -72,13 +72,14 @@ class RoomModelAdapter extends TypeAdapter<RoomModel> {
       ..members = (fields[3] as List).cast<dynamic>()
       ..type = fields[4] as RoomType
       ..photoURL = fields[5] as String
-      ..lastMessage = fields[6] as String;
+      ..lastMessage = fields[6] as String
+      ..lastUpdate = fields[7] as DateTime;
   }
 
   @override
   void write(BinaryWriter writer, RoomModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.uid)
       ..writeByte(1)
@@ -92,7 +93,9 @@ class RoomModelAdapter extends TypeAdapter<RoomModel> {
       ..writeByte(5)
       ..write(obj.photoURL)
       ..writeByte(6)
-      ..write(obj.lastMessage);
+      ..write(obj.lastMessage)
+      ..writeByte(7)
+      ..write(obj.lastUpdate);
   }
 
   @override

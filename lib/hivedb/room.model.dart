@@ -38,6 +38,6 @@ class RoomModel extends HiveObject {
   @HiveField(6, defaultValue: true)
   String lastMessage = "New room";
 
-  // @HiveField(7, defaultValue: true)
-  // DateTime
+  @HiveField(7, defaultValue: true)
+  DateTime lastUpdate = DateTime.now();
 }

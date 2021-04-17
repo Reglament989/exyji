@@ -22,14 +22,19 @@ class Body extends StatelessWidget {
       valueListenable: Hive.box<RoomModel>('Rooms').listenable(),
       builder: (ctx, Box<RoomModel> box, widget) {
         final allRooms = box.values.toList();
+        allRooms.sort((a, b) {
+          return a.lastUpdate.compareTo(b.lastUpdate);
+        });
         return SizedBox.expand(
           child: PageView(
             controller: _pageController,
             onPageChanged: (index) => updateIndex(index),
             children: <Widget>[
               BodyPage(allRooms: allRooms), // All
-              BodyPage(allRooms: allRooms, sortBy: RoomType.contact), // Contacts
-              BodyPage(allRooms: allRooms, sortBy: RoomType.channel), // Channels
+              BodyPage(
+                  allRooms: allRooms, sortBy: RoomType.contact), // Contacts
+              BodyPage(
+                  allRooms: allRooms, sortBy: RoomType.channel), // Channels
               BodyPage(allRooms: allRooms, sortBy: RoomType.bot), // Bots
             ],
           ),
