@@ -1,10 +1,21 @@
 import 'package:fl_reload/constants.dart';
+import 'package:fl_reload/hivedb/room.model.dart';
 import 'package:fl_reload/screens/discover/discover_screen.dart';
 import 'package:fl_reload/screens/home/home_screen.dart';
 import 'package:fl_reload/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+
+  Hive.registerAdapter(RoomModelAdapter());
+  Hive.registerAdapter(RoomTypeAdapter());
+
+  await Hive.openBox<RoomModel>("Rooms");
+  // await box.deleteFromDisk();
+  // await Hive.openBox("Global");
   runApp(MyApp());
 }
 

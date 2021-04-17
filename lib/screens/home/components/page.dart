@@ -1,3 +1,4 @@
+import 'package:fl_reload/hivedb/room.model.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -5,11 +6,47 @@ import 'package:cached_network_image/cached_network_image.dart';
 const uuid = Uuid();
 
 class BodyPage extends StatelessWidget {
+  final List<RoomModel> allRooms;
+  final RoomType sortBy;
+
+  const BodyPage({Key? key, required this.allRooms, this.sortBy = RoomType.any})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var rooms = [];
+    if (sortBy == RoomType.any) {
+      rooms = allRooms;
+    } else {
+      allRooms.forEach((r) {
+        if (r.type == sortBy) {
+          rooms.add(r);
+        }
+      });
+    }
+    if (rooms.length < 1) {
+      var nameList;
+      switch (sortBy) {
+        case RoomType.contact:
+          nameList = "contacts";
+          break;
+        case RoomType.channel:
+          nameList = "channels";
+          break;
+        case RoomType.bot:
+          nameList = "bots";
+          break;
+        default:
+          nameList = "room";
+      }
+      return Center(
+        child: Text("Your $nameList sheet is empty",
+            style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
+      );
+    }
     return Container(
       child: ListView.separated(
-          itemCount: 20,
+          physics: BouncingScrollPhysics(),
+          itemCount: rooms.length,
           separatorBuilder: (BuildContext ctx, idx) => Divider(
                 indent: 64,
                 endIndent: 18,
@@ -19,10 +56,10 @@ class BodyPage extends StatelessWidget {
           itemBuilder: (BuildContext ctx, idx) => ListItem(
                 ctx: ctx,
                 idx: idx,
-                key: Key(uuid.v4()),
-                title: "Hello",
-                subtitle: "How are you?",
-                icon: "https://source.unsplash.com/random/56x56",
+                key: Key(rooms[idx].uid),
+                title: rooms[idx].title,
+                subtitle: rooms[idx].lastMessage,
+                icon: rooms[idx].photoURL,
               )),
     );
   }

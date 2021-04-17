@@ -54,9 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   fabKey.currentState?.close();
                 },
                 closedBuilder: (BuildContext ctx, VoidCallback _) =>
-                    Icon(Icons.create),
+                    Padding(padding: EdgeInsets.all(15), child: Icon(Icons.create)),
                 openBuilder: (BuildContext ctx, VoidCallback _) {
-                  return CreateChatMenu();
+                  return CreateChatMenu(currentIndexOfPageView: _currentIndex);
                 }),
             IconButton(
                 icon: Icon(Icons.favorite),

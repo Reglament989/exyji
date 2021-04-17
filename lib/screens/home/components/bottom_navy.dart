@@ -37,19 +37,19 @@ class BottomNavy extends StatelessWidget {
               'Contacts',
               textAlign: TextAlign.center,
             ),
-            icon: Icon(Icons.apps)),
+            icon: Icon(Icons.account_circle)),
         BottomNavyBarItem(
             title: Text(
               'Channels',
               textAlign: TextAlign.center,
             ),
-            icon: Icon(Icons.chat_bubble)),
+            icon: Icon(Icons.public)),
         BottomNavyBarItem(
             title: Text(
               'Bots',
               textAlign: TextAlign.center,
             ),
-            icon: Icon(Icons.settings)),
+            icon: Icon(Icons.precision_manufacturing_sharp)),
       ],
     );
   }

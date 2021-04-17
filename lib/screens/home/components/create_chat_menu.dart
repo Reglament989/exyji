@@ -1,22 +1,57 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:fl_reload/constants.dart';
 import 'package:fl_reload/helpers/file_helper.dart';
+import 'package:fl_reload/hivedb/room.model.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:hive/hive.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
 
+enum PageViewStruct { all, contact, channels, bots }
+
 class CreateChatMenu extends StatefulWidget {
+  final int currentIndexOfPageView;
+  CreateChatMenu({required this.currentIndexOfPageView});
   @override
-  _CreateChatMenuState createState() => _CreateChatMenuState();
+  _CreateChatMenuState createState() =>
+      _CreateChatMenuState(currentIndexOfPageView: currentIndexOfPageView);
 }
 
 class _CreateChatMenuState extends State<CreateChatMenu> {
   final roomNameController = TextEditingController();
   final roomDescriptionController = TextEditingController();
+  final int currentIndexOfPageView;
+  late final String roomTypeDescriptor;
+  late final RoomType roomType;
   bool loading = false;
   bool _roomUpdate = false;
   Uint8List? roomAvatar;
+
+  _CreateChatMenuState({required this.currentIndexOfPageView});
+
+  @override
+  void initState() {
+    switch (currentIndexOfPageView) {
+      case 1:
+        roomTypeDescriptor = "contact room";
+        roomType = RoomType.contact;
+        break;
+      case 2:
+        roomTypeDescriptor = "channel";
+        roomType = RoomType.channel;
+        break;
+      case 3:
+        roomTypeDescriptor = "bot";
+        roomType = RoomType.bot;
+        break;
+      default:
+        roomTypeDescriptor = "room";
+        roomType = RoomType.contact;
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -33,9 +68,17 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
     super.didChangeDependencies();
   }
 
+  Future _createNewRoom() async {
+    final newRoom = RoomModel();
+    // newRoom.members = [im]
+    newRoom.title = roomNameController.text;
+    newRoom.type = roomType;
+    await Hive.box<RoomModel>("Rooms").add(newRoom);
+    Navigator.of(context).pop();
+  }
+
   Future _changeRoomPhoto() async {
-    final rawFile =
-        await FileApi.pick(extensions: ['jpg', 'png']);
+    final rawFile = await FileApi.pick(extensions: ['jpg', 'png']);
     setState(() {
       roomAvatar = rawFile!.first;
     });
@@ -45,7 +88,7 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New room'),
+        title: Text('New $roomTypeDescriptor'),
       ),
       body: Container(
         alignment: Alignment.center,
@@ -108,11 +151,15 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
                   width: 200,
                   height: 65,
                   child: ElevatedButton.icon(
-                    onPressed: () => {},
-                    label: Text('Create', style: TextStyle(fontSize: 16),),
+                    onPressed: () => _createNewRoom(),
+                    label: Text(
+                      'Create',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     icon: Icon(Icons.create),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                       shape: StadiumBorder(),
                     ),
                   ),
