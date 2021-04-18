@@ -3,7 +3,9 @@ import 'dart:typed_data';
 
 import 'package:fl_reload/constants.dart';
 import 'package:fl_reload/helpers/file_helper.dart';
+import 'package:fl_reload/hivedb/messages.model.dart';
 import 'package:fl_reload/hivedb/room.model.dart';
+import 'package:fl_reload/hivedb/room_cache.model.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:hive/hive.dart';
@@ -74,6 +76,8 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
     newRoom.title = roomNameController.text;
     newRoom.type = roomType;
     await Hive.box<RoomModel>("Rooms").add(newRoom);
+    await Hive.openBox<MessagesModel>("Room-${newRoom.uid}");
+    await Hive.openBox<RoomCache>("Room-${newRoom.uid}-cache");
     Navigator.of(context).pop();
   }
 

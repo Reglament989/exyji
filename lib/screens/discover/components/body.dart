@@ -42,6 +42,7 @@ class _BodyState extends State<Body> {
             backgroundColor: Colors.cyan.withOpacity(0.5),
             nextScreen: this.nextScreen,
             isSkiped: true,
+            arrowDown: true,
           ),
           DiscoverScreen(
             header: "We have support Open Source",
@@ -55,7 +56,7 @@ class _BodyState extends State<Body> {
             header: "Fully encryption",
             lorem:
                 "All data stored on client, server work on message broker, he just delivered your message to others",
-            lottieAsset: Assets.flasksAnimation,
+            lottieAsset: Assets.lockerAnimation,
             backgroundColor: Colors.cyan.withOpacity(0.5),
             nextScreen: this.nextScreen,
             buttonTitle: "Let's go to a meeting experiments",

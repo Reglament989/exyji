@@ -1,4 +1,5 @@
 import 'package:fl_reload/constants.dart';
+import 'package:fl_reload/hivedb/messages.model.dart';
 import 'package:fl_reload/hivedb/room.model.dart';
 import 'package:fl_reload/screens/discover/discover_screen.dart';
 import 'package:fl_reload/screens/home/home_screen.dart';
@@ -7,14 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'hivedb/room_cache.model.dart';
+
 void main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(RoomModelAdapter());
   Hive.registerAdapter(RoomTypeAdapter());
+  Hive.registerAdapter(MessagesModelAdapter());
+  Hive.registerAdapter(EncryptedBlockAdapter());
+  Hive.registerAdapter(RoomCacheAdapter());
 
-  await Hive.openBox<RoomModel>("Rooms");
-  // await box.deleteFromDisk();
+  final rooms = await Hive.openBox<RoomModel>("Rooms");
+  await Future.forEach(rooms.values, (RoomModel r) async {
+    await Hive.openBox<MessagesModel>("Room-${r.uid}");
+    await Hive.openBox<RoomCache>("Room-${r.uid}-cache");
+  });
+  // await rooms.deleteFromDisk();
   // await Hive.openBox("Global");
   runApp(MyApp());
 }

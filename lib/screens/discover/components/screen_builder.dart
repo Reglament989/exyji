@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fl_reload/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -10,7 +9,8 @@ class DiscoverScreen extends StatelessWidget {
   final Color backgroundColor;
   final Function nextScreen;
   final bool isSkiped;
-  final String buttonTitle;
+  final String? buttonTitle;
+  final arrowDown;
 
   const DiscoverScreen({
     Key? key,
@@ -20,7 +20,8 @@ class DiscoverScreen extends StatelessWidget {
     required this.backgroundColor,
     required this.nextScreen,
     this.isSkiped = false,
-    this.buttonTitle = "Next",
+    this.arrowDown = false,
+    this.buttonTitle,
   }) : super(key: key);
 
   @override
@@ -81,34 +82,39 @@ class DiscoverScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 40),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)))),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                      child: Text(
-                        buttonTitle,
-                        style: TextStyle(fontSize: 18),
+            if (buttonTitle != null)
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 40),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0)))),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                        child: Text(
+                          buttonTitle!,
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      if (buttonTitle != "Next") {
+                      onPressed: () {
                         Navigator.of(context)
                             .pushReplacementNamed(AppRouter.home);
                         return;
-                      }
-                      nextScreen();
-                    },
-                  ),
-                ],
-              ),
-            )
+                      },
+                    ),
+                  ],
+                ),
+              )
+            else if (arrowDown)
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Lottie.asset(Assets.arrowDownAnimation,
+                    width: 56, height: 56),
+              )
           ],
         ));
   }

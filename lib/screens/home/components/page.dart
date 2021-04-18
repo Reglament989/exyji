@@ -1,4 +1,6 @@
+import 'package:animations/animations.dart';
 import 'package:fl_reload/hivedb/room.model.dart';
+import 'package:fl_reload/screens/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -54,51 +56,48 @@ class BodyPage extends StatelessWidget {
                 color: Colors.black.withOpacity(0.6),
               ),
           itemBuilder: (BuildContext ctx, idx) => ListItem(
-                ctx: ctx,
-                idx: idx,
-                key: Key(rooms[idx].uid),
-                title: rooms[idx].title,
-                subtitle: rooms[idx].lastMessage,
-                icon: rooms[idx].photoURL,
-              )),
+              ctx: ctx, idx: idx, key: Key(rooms[idx].uid), room: rooms[idx])),
     );
   }
 }
 
 class ListItem extends StatelessWidget {
   final ctx, idx;
-  final String title, subtitle, icon;
+  final RoomModel room;
 
   const ListItem(
-      {Key? key,
-      required this.ctx,
-      required this.idx,
-      required this.title,
-      required this.subtitle,
-      required this.icon})
+      {Key? key, required this.ctx, required this.idx, required this.room})
       : assert(ctx != null, idx != null),
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        title: Text(title),
-        subtitle: Text(subtitle),
-        leading: Container(
-          width: 56,
-          height: 56,
-          child: Center(
-            child: CachedNetworkImage(
-              imageUrl: icon,
-              imageBuilder: (ctx, imageProvider) => Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    )),
+    return OpenContainer(
+        closedElevation: 0,
+        closedColor: Colors.transparent,
+        openElevation: 0,
+        openColor: Colors.transparent,
+        closedBuilder: (BuildContext ctx, VoidCallback _) => ListTile(
+            title: Text(room.title),
+            subtitle: Text(room.lastMessage),
+            leading: Container(
+              width: 56,
+              height: 56,
+              child: Center(
+                child: CachedNetworkImage(
+                  imageUrl: room.photoURL,
+                  imageBuilder: (ctx, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        )),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ));
+            )),
+        openBuilder: (BuildContext ctx, VoidCallback _) => ChatScreen(
+              room: room,
+            ));
   }
 }

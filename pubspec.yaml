@@ -1,9 +1,10 @@
 name: fl_reload
 description: A new Flutter project.
+repository: "https://notabug.org/Reglament989/fl_androx"
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+#publish_to: "pub.dev" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -22,14 +23,18 @@ environment:
 
 dependencies:
   # Low-side
-  uuid: 3.0.4
+  uuid: ^3.0.4
 
   # Helpers
+  file_picker: ^3.0.1
   cached_network_image: ^3.0.0
+  url_launcher: ^6.0.3
+  flutter_linkify: ^5.0.2
 
   # UI
   fab_circular_menu: ^1.0.0
-  flutter_slidable: 0.6.0-nullsafety.0
+  flutter_slidable: ^0.6.0
+  bottom_navy_bar: ^6.0.0
 
   # Databases
   hive: ^2.0.0
@@ -42,17 +47,28 @@ dependencies:
   # Linux dependencies
   file_selector: ^0.8.2
   file_selector_linux: ^0.0.2
+
+  # Flutter
+  flutter_web_plugins:
+    sdk: flutter
   flutter:
     sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  bottom_navy_bar: ^6.0.0
-  file_picker: ^3.0.1
+  
+
+  # Date time
   intl: ^0.17.0
+
+  # Crypto
   cryptography: ^2.0.1
   cryptography_flutter: ^2.0.0
+
+  # Some shit for web
+  #flutter_web_plugins:
+  file_selector_web: ^0.8.1
 
 dev_dependencies:
   hive_generator: ^1.0.1
