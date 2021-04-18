@@ -12,6 +12,20 @@ class ChatViewArguments {
 class ChatScreen extends StatelessWidget {
   final RoomModel room;
 
+  _showPopupMenu(Offset offset, BuildContext ctx) async {
+    double left = offset.dx;
+    double top = offset.dy;
+    await showMenu(
+      context: ctx,
+      position: RelativeRect.fromLTRB(left, top, 0, 0),
+      items: [
+        PopupMenuItem<String>(child: const Text('Doge'), value: 'Doge'),
+        PopupMenuItem<String>(child: const Text('Lion'), value: 'Lion'),
+      ],
+      elevation: 8.0,
+    );
+  }
+
   const ChatScreen({Key? key, required this.room}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -23,11 +37,12 @@ class ChatScreen extends StatelessWidget {
             child: Text(room.title)),
         centerTitle: true,
         actions: [
-          IconButton(
-              icon: const Icon(Icons.more_vert),
-              tooltip: 'More',
-              onPressed: () =>
-                  {}), // , arguments: InviteViewArguments(chatId: args.chatId)
+          GestureDetector(
+            onTapDown: (TapDownDetails details) {
+              _showPopupMenu(details.globalPosition, context);
+            },
+            child: Padding(padding: EdgeInsets.all(12), child: const Icon(Icons.more_vert)),
+          ), // , arguments: InviteViewArguments(chatId: args.chatId)
         ],
       ),
       body: Body(

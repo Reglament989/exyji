@@ -69,6 +69,35 @@ class ListItem extends StatelessWidget {
       {Key? key, required this.ctx, required this.idx, required this.room})
       : assert(ctx != null, idx != null),
         super(key: key);
+
+  _showMenu(Offset offset, BuildContext ctx) async {
+    double left = offset.dx;
+    double top = offset.dy;
+    final returnFromMenu = await showMenu(
+      context: ctx,
+      position: RelativeRect.fromLTRB(left, top, left, top),
+      items: [
+        PopupMenuItem<String>(child: Row(
+          children: [
+            Icon(Icons.volume_off),
+            Padding(padding: EdgeInsets.all(12), child: const Text('Mute'))
+          ],
+        ), value: 'mute'),
+        PopupMenuItem<String>(child: Row(
+          children: [
+            Icon(Icons.add_box_outlined),
+            Padding(padding: EdgeInsets.all(12), child: const Text('Invite'))
+          ],
+        ), value: 'invite'),
+      ],
+      elevation: 8.0,
+    );
+    if (returnFromMenu != null) {
+      print(returnFromMenu);
+    }
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return OpenContainer(
@@ -76,26 +105,29 @@ class ListItem extends StatelessWidget {
         closedColor: Colors.transparent,
         openElevation: 0,
         openColor: Colors.transparent,
-        closedBuilder: (BuildContext ctx, VoidCallback _) => ListTile(
-            title: Text(room.title),
-            subtitle: Text(room.lastMessage),
-            leading: Container(
-              width: 56,
-              height: 56,
-              child: Center(
-                child: CachedNetworkImage(
-                  imageUrl: room.photoURL,
-                  imageBuilder: (ctx, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        )),
+        closedBuilder: (BuildContext ctx, VoidCallback _) => GestureDetector(
+            onLongPressStart: (LongPressStartDetails details) async =>
+                await _showMenu(details.globalPosition, ctx),
+            child: ListTile(
+                title: Text(room.title),
+                subtitle: Text(room.lastMessage),
+                leading: Container(
+                  width: 56,
+                  height: 56,
+                  child: Center(
+                    child: CachedNetworkImage(
+                      imageUrl: room.photoURL,
+                      imageBuilder: (ctx, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            )),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )),
+                ))),
         openBuilder: (BuildContext ctx, VoidCallback _) => ChatScreen(
               room: room,
             ));
