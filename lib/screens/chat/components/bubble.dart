@@ -10,8 +10,8 @@ class Bubble extends StatelessWidget {
   final sender;
   final bool isSender;
   final bool isReply;
-  final String replyBody;
-  final String replyFrom;
+  final String? replyBody;
+  final String? replyFrom;
   final Function callbackReply;
   final String uid;
   Bubble(
@@ -19,8 +19,8 @@ class Bubble extends StatelessWidget {
       required this.date,
       this.isSender = true,
       this.isReply = false,
-      this.replyBody = "",
-      this.replyFrom = "",
+      this.replyBody,
+      this.replyFrom,
       required this.callbackReply,
       required this.uid,
       required this.sender,
@@ -41,8 +41,8 @@ class Bubble extends StatelessWidget {
         IconSlideAction(
           color: Colors.transparent,
           iconWidget: Icon(Icons.reply_sharp, color: Colors.black),
-          onTap: () =>
-              callbackReply(uid: uid, replyBody: body, replyFromBody: sender),
+          onTap: () async => await callbackReply(
+              uid: uid, replyBody: body, replyFromBody: sender),
         ),
       ],
       actions: [
@@ -93,7 +93,7 @@ class Bubble extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [Text(replyFrom), Text(replyBody)],
+                            children: [Text(replyFrom!), Text(replyBody!)],
                           ),
                         ),
                         SelectableLinkify(

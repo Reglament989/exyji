@@ -18,6 +18,7 @@ void main() async {
   Hive.registerAdapter(MessagesModelAdapter());
   Hive.registerAdapter(EncryptedBlockAdapter());
   Hive.registerAdapter(RoomCacheAdapter());
+  Hive.registerAdapter(ReplyModelAdapter());
 
   final rooms = await Hive.openBox<RoomModel>("Rooms");
   await Future.forEach(rooms.values, (RoomModel r) async {
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
         AppRouter.home: (ctx) => HomeScreen()
       },
       initialRoute: AppRouter.login,
-      theme: ThemeData.light().copyWith(
+      theme: ThemeData(fontFamily: 'YTSans').copyWith(
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
             TargetPlatform.android: ZoomPageTransitionsBuilder(),

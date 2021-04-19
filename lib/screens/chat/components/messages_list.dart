@@ -34,6 +34,9 @@ class MessagesList extends StatelessWidget {
             reverse: true,
             itemCount: messages.length,
             itemBuilder: (BuildContext ctx, idx) => Bubble(
+              isReply: messages[idx].reply != null ? true : false,
+              replyBody: messages[idx].reply?.body,
+              replyFrom: messages[idx].reply?.from,
               slidableController: slidableController,
               callbackReply: replyCallback,
               date: DateFormat.Hm().format(messages[idx].createdAt),

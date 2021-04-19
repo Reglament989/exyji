@@ -16,15 +16,25 @@ class RoomCacheAdapter extends TypeAdapter<RoomCache> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return RoomCache()..lastInput = fields[0] as String;
+    return RoomCache()
+      ..lastInput = fields[0] as String
+      ..replyBodyMessage = fields[1] as String?
+      ..replyMessageId = fields[2] as String?
+      ..replyFrom = fields[3] as String?;
   }
 
   @override
   void write(BinaryWriter writer, RoomCache obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.lastInput);
+      ..write(obj.lastInput)
+      ..writeByte(1)
+      ..write(obj.replyBodyMessage)
+      ..writeByte(2)
+      ..write(obj.replyMessageId)
+      ..writeByte(3)
+      ..write(obj.replyFrom);
   }
 
   @override

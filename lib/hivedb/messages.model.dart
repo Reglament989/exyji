@@ -15,6 +15,16 @@ class EncryptedBlock extends HiveObject {
   late String prevHash;
 }
 
+@HiveType(typeId: 6)
+class ReplyModel extends HiveObject {
+  @HiveField(0)
+  late String body;
+  @HiveField(1)
+  late String from;
+  @HiveField(2)
+  late String fromUid;
+}
+
 @HiveType(typeId: 3)
 class MessagesModel extends HiveObject {
   @HiveField(0, defaultValue: true)
@@ -23,10 +33,14 @@ class MessagesModel extends HiveObject {
   DateTime createdAt = DateTime.now();
   @HiveField(2)
   late EncryptedBlock block;
-  @HiveField(3, defaultValue: true)
-  bool isDecrypted = false;
+  @HiveField(3)
+  String? replyUid;
   @HiveField(4, defaultValue: true)
+  bool isDecrypted = false;
+  @HiveField(5, defaultValue: true)
   String messageData = "";
-  @HiveField(5)
+  @HiveField(6)
+  ReplyModel? reply;
+  @HiveField(7)
   late String senderUid;
 }

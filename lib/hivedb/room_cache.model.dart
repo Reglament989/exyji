@@ -6,4 +6,11 @@ part 'room_cache.model.g.dart';
 class RoomCache extends HiveObject {
   @HiveField(0, defaultValue: true)
   String lastInput = "";
+
+  @HiveField(1)
+  String? replyBodyMessage;
+  @HiveField(2)
+  String? replyMessageId;
+  @HiveField(3)
+  String? replyFrom;
 }
