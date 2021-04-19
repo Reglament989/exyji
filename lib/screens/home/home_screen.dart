@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home")),
+      appBar: AppBar(title: Text("Home"), centerTitle: true),
       drawer: HomeDrawer(),
       floatingActionButton: FabCircularMenu(
           key: fabKey,

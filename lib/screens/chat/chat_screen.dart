@@ -32,8 +32,7 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed(AppRouter
-                .chatDetails), // , arguments: ChatDetailsViewArguments(chatId: args.roomId)
+            onTap: () {}, // , arguments: ChatDetailsViewArguments(chatId: args.roomId)
             child: Text(room.title)),
         centerTitle: true,
         actions: [

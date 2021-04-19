@@ -69,6 +69,8 @@ dependencies:
   # Some shit for web
   #flutter_web_plugins:
   file_selector_web: ^0.8.1
+  flutter_luban: ^0.1.12
+  path_provider: ^2.0.1
 
 dev_dependencies:
   hive_generator: ^1.0.1

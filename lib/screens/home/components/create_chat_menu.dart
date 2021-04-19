@@ -71,14 +71,16 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
   }
 
   Future _createNewRoom() async {
-    final newRoom = RoomModel();
-    // newRoom.members = [im]
-    newRoom.title = roomNameController.text;
-    newRoom.type = roomType;
-    await Hive.box<RoomModel>("Rooms").add(newRoom);
-    await Hive.openBox<MessagesModel>("Room-${newRoom.uid}");
-    await Hive.openBox<RoomCache>("Room-${newRoom.uid}-cache");
-    Navigator.of(context).pop();
+    if (roomNameController.text.trim().length > 0) {
+      final newRoom = RoomModel();
+      // newRoom.members = [im]
+      newRoom.title = roomNameController.text.trim();
+      newRoom.type = roomType;
+      await Hive.box<RoomModel>("Rooms").add(newRoom);
+      await Hive.openBox<MessagesModel>("Room-${newRoom.uid}");
+      await Hive.openBox<RoomCache>("Room-${newRoom.uid}-cache");
+      Navigator.of(context).pop();
+    }
   }
 
   Future _changeRoomPhoto() async {
