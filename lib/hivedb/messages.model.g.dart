@@ -6,6 +6,50 @@ part of 'messages.model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+class TypeMessageAdapter extends TypeAdapter<TypeMessage> {
+  @override
+  final int typeId = 7;
+
+  @override
+  TypeMessage read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return TypeMessage.photo;
+      case 1:
+        return TypeMessage.text;
+      case 2:
+        return TypeMessage.file;
+      default:
+        return TypeMessage.photo;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, TypeMessage obj) {
+    switch (obj) {
+      case TypeMessage.photo:
+        writer.writeByte(0);
+        break;
+      case TypeMessage.text:
+        writer.writeByte(1);
+        break;
+      case TypeMessage.file:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TypeMessageAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class EncryptedBlockAdapter extends TypeAdapter<EncryptedBlock> {
   @override
   final int typeId = 4;
@@ -87,6 +131,38 @@ class ReplyModelAdapter extends TypeAdapter<ReplyModel> {
           typeId == other.typeId;
 }
 
+class MediaMessageAdapter extends TypeAdapter<MediaMessage> {
+  @override
+  final int typeId = 8;
+
+  @override
+  MediaMessage read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return MediaMessage()..data = fields[0] as Uint8List?;
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaMessage obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.data);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaMessageAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class MessagesModelAdapter extends TypeAdapter<MessagesModel> {
   @override
   final int typeId = 3;
@@ -105,13 +181,15 @@ class MessagesModelAdapter extends TypeAdapter<MessagesModel> {
       ..isDecrypted = fields[4] as bool
       ..messageData = fields[5] as String
       ..reply = fields[6] as ReplyModel?
-      ..senderUid = fields[7] as String;
+      ..senderUid = fields[7] as String
+      ..type = fields[8] as TypeMessage
+      ..media = fields[9] as MediaMessage?;
   }
 
   @override
   void write(BinaryWriter writer, MessagesModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.uid)
       ..writeByte(1)
@@ -127,7 +205,11 @@ class MessagesModelAdapter extends TypeAdapter<MessagesModel> {
       ..writeByte(6)
       ..write(obj.reply)
       ..writeByte(7)
-      ..write(obj.senderUid);
+      ..write(obj.senderUid)
+      ..writeByte(8)
+      ..write(obj.type)
+      ..writeByte(9)
+      ..write(obj.media);
   }
 
   @override

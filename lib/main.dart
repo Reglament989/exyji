@@ -19,6 +19,8 @@ void main() async {
   Hive.registerAdapter(EncryptedBlockAdapter());
   Hive.registerAdapter(RoomCacheAdapter());
   Hive.registerAdapter(ReplyModelAdapter());
+  Hive.registerAdapter(MediaMessageAdapter());
+  Hive.registerAdapter(TypeMessageAdapter());
 
   final rooms = await Hive.openBox<RoomModel>("Rooms");
   await Future.forEach(rooms.values, (RoomModel r) async {

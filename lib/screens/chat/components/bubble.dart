@@ -1,3 +1,6 @@
+import 'package:fl_reload/helpers/linkify.dart';
+import 'package:fl_reload/hivedb/messages.model.dart';
+import 'package:fl_reload/screens/chat/components/other_bubbels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -14,6 +17,8 @@ class Bubble extends StatelessWidget {
   final String? replyFrom;
   final Function callbackReply;
   final String uid;
+  final bool isMedia;
+  final MediaMessage? media;
   Bubble(
       {required this.body,
       required this.date,
@@ -24,7 +29,9 @@ class Bubble extends StatelessWidget {
       required this.callbackReply,
       required this.uid,
       required this.sender,
-      required this.slidableController});
+      required this.slidableController,
+      this.isMedia = false,
+      this.media});
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -53,81 +60,96 @@ class Bubble extends StatelessWidget {
           ),
         ),
       ],
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment:
-              isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              constraints: BoxConstraints(maxWidth: 400, minWidth: 35),
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: Offset(0, 2), // changes position of shadow
+      child: Builder(builder: (BuildContext ctx) {
+        if (isMedia) {
+          return Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment:
+                  isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PhotoBubble(
+                  photo: media!.data!,
+                )
+              ],
+            ),
+          );
+        }
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment:
+                isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                constraints: BoxConstraints(maxWidth: 400, minWidth: 35),
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                    color: Colors.lightBlue[400],
+                    border: Border.all(
+                      color: Colors.lightBlue,
                     ),
-                  ],
-                  color: Colors.lightBlue[400],
-                  border: Border.all(
-                    color: Colors.lightBlue,
-                  ),
-                  borderRadius: BorderRadius.circular(15)),
-              child: isReply
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  left: BorderSide(
-                                      width: 2, color: Colors.black))),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [Text(replyFrom!), Text(replyBody!)],
+                    borderRadius: BorderRadius.circular(15)),
+                child: isReply
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 8),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    left: BorderSide(
+                                        width: 2, color: Colors.black))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [Text(replyFrom!), Text(replyBody!)],
+                            ),
                           ),
-                        ),
-                        SelectableLinkify(
-                          onOpen: (link) async {
-                            if (await canLaunch(link.url)) {
-                              await launch(link.url);
-                            }
-                          },
-                          text: body,
-                          textAlign: TextAlign.left,
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(fontSize: 17, color: Colors.black),
-                          linkStyle: TextStyle(color: Colors.red),
-                        )
-                      ],
-                    )
-                  : Stack(
-                      children: [
-                        SelectableLinkify(
-                          onOpen: (link) async {
-                            await launch(link.url);
-                          },
-                          text: body,
-                          textAlign: TextAlign.left,
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(fontSize: 17, color: Colors.black),
-                          linkStyle: TextStyle(color: Colors.indigo),
-                        ),
-                      ],
-                    ),
-            )
-          ],
-        ),
-      ),
+                          LinkText(
+                              text: body,
+                              onOpen: (link) async {
+                                await launch(link.url);
+                              })
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          LinkText(
+                              text: body,
+                              onOpen: (link) async {
+                                await launch(link.url);
+                              })
+                          // Linkify(
+                          //   onOpen: (link) async {
+                          //     await launch(link.url);
+                          //   },
+                          //   text: body,
+                          //   textAlign: TextAlign.left,
+                          //   textDirection: TextDirection.ltr,
+                          //   style: TextStyle(fontSize: 17, color: Colors.black),
+                          //   linkStyle: TextStyle(color: Colors.indigo),
+                          // ),
+                        ],
+                      ),
+              )
+            ],
+          ),
+        );
+      }),
     );
   }
 }

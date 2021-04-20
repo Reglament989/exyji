@@ -1,3 +1,4 @@
+import 'package:fl_reload/helpers/file_helper.dart';
 import 'package:fl_reload/hivedb/messages.model.dart';
 import 'package:fl_reload/hivedb/room_cache.model.dart';
 import 'package:flutter/material.dart';
@@ -49,9 +50,39 @@ class _InputBlockState extends State<InputBlock> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                Icons.add,
-                size: 32,
+              InkWell(
+                onTap: () async {
+                  final rawFile =
+                      await FileApi.pick(extensions: ['jpg', 'png']);
+                  final newMessage = MessagesModel();
+                  newMessage.type = TypeMessage.photo;
+                  final media = MediaMessage();
+                  media..data = rawFile!.first;
+                  newMessage.media = media;
+                  newMessage.senderUid = "me";
+                  newMessage.isDecrypted = true;
+                  final block = EncryptedBlock();
+                  block..crypto = "";
+                  block..hash = "";
+                  block..prevHash = "";
+                  block..signature = "";
+                  newMessage.block = block;
+                  // debugPrint(cache.replyBodyMessage);
+                  if (cache.replyBodyMessage != null) {
+                    newMessage.replyUid = cache.replyMessageId;
+                    final newReply = ReplyModel();
+                    newReply..body = cache.replyBodyMessage!;
+                    newReply..from = cache.replyFrom!;
+                    newReply..fromUid = cache.replyMessageId!;
+                    newMessage.reply = newReply;
+                  }
+                  await Hive.box<MessagesModel>("Room-$roomUid")
+                      .add(newMessage);
+                },
+                child: Icon(
+                  Icons.attachment,
+                  size: 32,
+                ),
               ),
               Expanded(
                   child: Container(
@@ -93,6 +124,7 @@ class _InputBlockState extends State<InputBlock> {
                       block..prevHash = "";
                       block..signature = "";
                       newMessage.block = block;
+                      newMessage.isDecrypted = true;
                       // debugPrint(cache.replyBodyMessage);
                       if (cache.replyBodyMessage != null) {
                         newMessage.replyUid = cache.replyMessageId;
