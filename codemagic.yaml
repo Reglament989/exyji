@@ -21,8 +21,9 @@ workflows:
           include: true
           source: true
       cancel_previous_builds: true
-    # scripts:
-    #   - ...
+    scripts:
+       - flutter build apk --release --split-per-abi
+       - flutter build ios --debug --no-codesign
     artifacts:
       - build/app/outputs/flutter-apk/**
       # - build/linux/**/**
