@@ -24,12 +24,12 @@ workflows:
     scripts:
        - name: Android
          script: flutter build apk --release --split-per-abi
-       - name: Ios
-         script: flutter build ios --debug --no-codesign
+      #  - name: Ios
+        #  script: flutter build ios --debug --no-codesign
     artifacts:
       - build/app/outputs/flutter-apk/**
       # - build/linux/**/**
-      - build/ios/ipa/*.ipa
+      # - build/ios/ipa/*.ipa
     # publishing:
     #   email:
     #     recipients:
