@@ -1,6 +1,6 @@
-import 'package:fl_reload/constants.dart';
-import 'package:fl_reload/hivedb/room.model.dart';
-import 'package:fl_reload/screens/chat/components/body.dart';
+import 'package:exyji/constants.dart';
+import 'package:exyji/hivedb/room.model.dart';
+import 'package:exyji/screens/chat/components/body.dart';
 import 'package:flutter/material.dart';
 
 class ChatViewArguments {
@@ -32,7 +32,8 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-            onTap: () {}, // , arguments: ChatDetailsViewArguments(chatId: args.roomId)
+            onTap:
+                () {}, // , arguments: ChatDetailsViewArguments(chatId: args.roomId)
             child: Text(room.title)),
         centerTitle: true,
         actions: [
@@ -40,7 +41,9 @@ class ChatScreen extends StatelessWidget {
             onTapDown: (TapDownDetails details) {
               _showPopupMenu(details.globalPosition, context);
             },
-            child: Padding(padding: EdgeInsets.all(12), child: const Icon(Icons.more_vert)),
+            child: Padding(
+                padding: EdgeInsets.all(12),
+                child: const Icon(Icons.more_vert)),
           ), // , arguments: InviteViewArguments(chatId: args.chatId)
         ],
       ),

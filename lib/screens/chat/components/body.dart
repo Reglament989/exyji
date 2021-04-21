@@ -1,6 +1,6 @@
-import 'package:fl_reload/hivedb/room.model.dart';
-import 'package:fl_reload/hivedb/room_cache.model.dart';
-import 'package:fl_reload/screens/chat/components/reply_content.dart';
+import 'package:exyji/hivedb/room.model.dart';
+import 'package:exyji/hivedb/room_cache.model.dart';
+import 'package:exyji/screens/chat/components/reply_content.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';

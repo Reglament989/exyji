@@ -1,5 +1,5 @@
-import 'package:fl_reload/constants.dart';
-import 'package:fl_reload/screens/discover/components/screen_builder.dart';
+import 'package:exyji/constants.dart';
+import 'package:exyji/screens/discover/components/screen_builder.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {

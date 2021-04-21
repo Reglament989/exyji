@@ -1,4 +1,4 @@
-import 'package:fl_reload/screens/login/components/body.dart';
+import 'package:exyji/screens/login/components/body.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {

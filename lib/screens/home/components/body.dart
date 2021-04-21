@@ -1,5 +1,5 @@
-import 'package:fl_reload/hivedb/room.model.dart';
-import 'package:fl_reload/screens/home/components/page.dart';
+import 'package:exyji/hivedb/room.model.dart';
+import 'package:exyji/screens/home/components/page.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';

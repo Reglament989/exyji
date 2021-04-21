@@ -1,6 +1,6 @@
-import 'package:fl_reload/helpers/linkify.dart';
-import 'package:fl_reload/hivedb/messages.model.dart';
-import 'package:fl_reload/screens/chat/components/other_bubbels.dart';
+import 'package:exyji/helpers/linkify.dart';
+import 'package:exyji/hivedb/messages.model.dart';
+import 'package:exyji/screens/chat/components/other_bubbels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';

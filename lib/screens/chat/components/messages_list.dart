@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fl_reload/hivedb/messages.model.dart';
-import 'package:fl_reload/hivedb/room.model.dart';
+import 'package:exyji/hivedb/messages.model.dart';
+import 'package:exyji/hivedb/room.model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';

@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
-import 'package:fl_reload/hivedb/room.model.dart';
-import 'package:fl_reload/screens/chat/chat_screen.dart';
+import 'package:exyji/hivedb/room.model.dart';
+import 'package:exyji/screens/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -77,25 +77,29 @@ class ListItem extends StatelessWidget {
       context: ctx,
       position: RelativeRect.fromLTRB(left, top, left, top),
       items: [
-        PopupMenuItem<String>(child: Row(
-          children: [
-            Icon(Icons.volume_off),
-            Padding(padding: EdgeInsets.all(12), child: const Text('Mute'))
-          ],
-        ), value: 'mute'),
-        PopupMenuItem<String>(child: Row(
-          children: [
-            Icon(Icons.add_box_outlined),
-            Padding(padding: EdgeInsets.all(12), child: const Text('Invite'))
-          ],
-        ), value: 'invite'),
+        PopupMenuItem<String>(
+            child: Row(
+              children: [
+                Icon(Icons.volume_off),
+                Padding(padding: EdgeInsets.all(12), child: const Text('Mute'))
+              ],
+            ),
+            value: 'mute'),
+        PopupMenuItem<String>(
+            child: Row(
+              children: [
+                Icon(Icons.add_box_outlined),
+                Padding(
+                    padding: EdgeInsets.all(12), child: const Text('Invite'))
+              ],
+            ),
+            value: 'invite'),
       ],
       elevation: 8.0,
     );
     if (returnFromMenu != null) {
       print(returnFromMenu);
     }
-    
   }
 
   @override

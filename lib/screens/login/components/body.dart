@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:fl_reload/constants.dart';
-import 'package:fl_reload/screens/login/components/footer.dart';
+import 'package:exyji/constants.dart';
+import 'package:exyji/screens/login/components/footer.dart';
 import 'package:flutter/material.dart';
 
 import 'header_and_inputs.dart';

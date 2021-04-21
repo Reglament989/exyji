@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cryptography/cryptography.dart';
-import 'package:fl_reload/encryption/helper.dart';
+import 'package:exyji/encryption/helper.dart';
 
 Future<List<List<List<int>>>> generateKeyPairs() async {
   final algorithm = Ed25519();

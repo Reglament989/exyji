@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
-import 'package:fl_reload/screens/home/components/body.dart';
-import 'package:fl_reload/screens/home/components/bottom_navy.dart';
-import 'package:fl_reload/screens/home/components/create_chat_menu.dart';
-import 'package:fl_reload/screens/home/components/drawer.dart';
+import 'package:exyji/screens/home/components/body.dart';
+import 'package:exyji/screens/home/components/bottom_navy.dart';
+import 'package:exyji/screens/home/components/create_chat_menu.dart';
+import 'package:exyji/screens/home/components/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 
@@ -53,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 onClosed: (Object? _) {
                   fabKey.currentState?.close();
                 },
-                closedBuilder: (BuildContext ctx, VoidCallback _) =>
-                    Padding(padding: EdgeInsets.all(15), child: Icon(Icons.create)),
+                closedBuilder: (BuildContext ctx, VoidCallback _) => Padding(
+                    padding: EdgeInsets.all(15), child: Icon(Icons.create)),
                 openBuilder: (BuildContext ctx, VoidCallback _) {
                   return CreateChatMenu(currentIndexOfPageView: _currentIndex);
                 }),
