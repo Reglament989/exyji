@@ -48,7 +48,7 @@ class _BodyState extends State<Body> {
             header: "We have support Open Source",
             lorem:
                 "All sources avalible on notabug, and can be reviewed. No secrets for users, only magic",
-            lottieAsset: Assets.flasksAnimation,
+            lottieAsset: Assets.foss,
             backgroundColor: Colors.cyan.withOpacity(0.5),
             nextScreen: this.nextScreen,
           ),

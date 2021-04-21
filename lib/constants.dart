@@ -23,6 +23,7 @@ class Assets {
   static const flasksAnimation = "assets/lottie/flasks.json";
   static const lockerAnimation = "assets/lottie/locker.json";
   static const arrowDownAnimation = "assets/lottie/arrow-down.json";
+  static const foss = "assets/lottie/foss.json";
 }
 
 class Config {
