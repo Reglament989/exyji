@@ -1,16 +1,15 @@
-# fl_reload
+# Exyji
 
-A new Flutter project.
+New powerfully chat for realtime messaging.
+More extensible and customizable.
+Simple for use
+Open source
+Fully encrypted
+Wont be a cross-platform, so recomendly for all realization use only dart
+Perfomance and User-experience all of we have.
 
-## Getting Started
+# RoadMap
+- Need ligthweigth backend, not know about which protocol
+- Create menu builder for customization all of we see on app
+- Maby blockchain in every chat.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
