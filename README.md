@@ -1,5 +1,5 @@
 # Exyji
-
+[![Build](https://github.com/Reglament989/exyji/actions/workflows/main.yml/badge.svg)](https://github.com/Reglament989/exyji/actions/workflows/main.yml)
 New powerfully chat for realtime messaging.
 More extensible and customizable.
 Simple for use
