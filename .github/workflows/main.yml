@@ -41,3 +41,8 @@ jobs:
           name: exyji-x86_64.apk
           path: build/app/outputs/flutter-apk/app-x86_64-release.apk
           # retention-days: 5
+      - name: Slack Notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
