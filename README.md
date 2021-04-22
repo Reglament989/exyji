@@ -1,6 +1,7 @@
 # Exyji
 [![Build](https://github.com/Reglament989/exyji/actions/workflows/main.yml/badge.svg)](https://github.com/Reglament989/exyji/actions/workflows/main.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FReglament989%2Fexyji.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FReglament989%2Fexyji?ref=badge_shield)
+[![codecov](https://codecov.io/gh/Reglament989/exyji/branch/master/graph/badge.svg?token=4pcGiTpq4w)](https://codecov.io/gh/Reglament989/exyji)
 New powerfully chat for realtime messaging.
 More extensible and customizable.
 Simple for use
