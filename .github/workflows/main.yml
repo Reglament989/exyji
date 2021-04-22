@@ -41,8 +41,11 @@ jobs:
           name: exyji-x86_64.apk
           path: build/app/outputs/flutter-apk/app-x86_64-release.apk
           # retention-days: 5
-      - name: Slack Notification
-        if: always()
-        uses: rtCamp/action-slack-notify@v2
+      - name: Slack notify
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
+        if: always() # Pick up events even if the job fails or is canceled.

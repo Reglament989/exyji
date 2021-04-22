@@ -64,7 +64,7 @@ Future<List<int>> deriveKey({required String key}) async {
     nonce: nonce,
   );
   final newSecretKeyBytes = await newSecretKey.extractBytes();
-  print("Secret key - $newSecretKeyBytes");
+  // print("Secret key - $newSecretKeyBytes");
   return newSecretKeyBytes;
 }
 
@@ -82,12 +82,12 @@ Future<Uint8List> encryptBlock(
     nonce: nonce,
   );
 
-  print("Lenght mac - ${secretBox.mac.bytes.length}");
+  // print("Lenght mac - ${secretBox.mac.bytes.length}");
 
   return secretBox.concatenation();
 }
 
-Future decryptBlock(
+Future<List<int>> decryptBlock(
     {required String key, required Uint8List encryptedMessage}) async {
   final algorithm = AesGcm.with128bits();
   final secretKey =
