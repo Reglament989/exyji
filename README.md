@@ -1,5 +1,6 @@
 # Exyji
 [![Build](https://github.com/Reglament989/exyji/actions/workflows/main.yml/badge.svg)](https://github.com/Reglament989/exyji/actions/workflows/main.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FReglament989%2Fexyji.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FReglament989%2Fexyji?ref=badge_shield)
 New powerfully chat for realtime messaging.
 More extensible and customizable.
 Simple for use
@@ -13,3 +14,7 @@ Perfomance and User-experience all of we have.
 - Create menu builder for customization all of we see on app
 - Maby blockchain in every chat.
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FReglament989%2Fexyji.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FReglament989%2Fexyji?ref=badge_large)
