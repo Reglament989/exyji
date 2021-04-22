@@ -49,10 +49,10 @@ jobs:
           fields: workflow,job,commit,repo,author,took,message,eventName
           custom_payload: |
             {
-              text: `Build (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} ${{ job.status }} in ${process.env.AS_TOOK}`,
+              text: `Workflow: ${process.env.AS_WORKFLOW}\tMessage: ${process.env.AS_MESSAGE}\nEvent: ${process.env.AS_EVENT_NAME}\tAuthor: ${process.env.AS_AUTHOR}`,
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `Workflow: ${process.env.AS_WORKFLOW}\tMessage: ${process.env.AS_MESSAGE}\nEvent: ${process.env.AS_EVENT_NAME}\tAuthor: ${process.env.AS_AUTHOR}`,
+                text: `Build (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} ${{ job.status }} in ${process.env.AS_TOOK}`,
               }]
             }
         env:

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class QuickWidgetTest extends StatelessWidget {
-  final Widget child;
+  final List<Widget> childs;
 
-  const QuickWidgetTest(this.child);
+  const QuickWidgetTest(this.childs);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: child,
+        body: Column(
+          children: childs,
+        ),
       ),
     );
   }
