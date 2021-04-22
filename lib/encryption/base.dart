@@ -43,7 +43,7 @@ Future<bool> verifySign(
   return isVerified;
 }
 
-Future excangeKeys() async {}
+// Future excangeKeys() async {}
 
 Future<List<int>> deriveKey({required String key}) async {
   final pbkdf2 = Pbkdf2(
@@ -98,21 +98,4 @@ Future<List<int>> decryptBlock(
     secretKey: secretKey,
   );
   return clearBlock;
-}
-
-void main(List<String> args) async {
-  final keys = await generateKeyPairs();
-  print("Keys generated of ${DateTime.now()}");
-  final encryptedMessage = await encryptBlock(
-      key: "Some key", message: utf8.encode("Hello what your nothing?"));
-  final sign = await signObject(
-      message: encryptedMessage, privateSeed: keys.first.first);
-  final isVerified = await verifySign(
-      message: encryptedMessage,
-      publicKey: keys.first.last,
-      rawSignature: sign.bytes);
-  final decryptedMessage =
-      await decryptBlock(encryptedMessage: encryptedMessage, key: "Some key");
-  print("Decrypted");
-  print(utf8.decode(decryptedMessage));
 }

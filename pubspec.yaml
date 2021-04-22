@@ -57,7 +57,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  
 
   # Date time
   intl: ^0.17.0
@@ -71,11 +70,11 @@ dependencies:
   file_selector_web: ^0.8.1
   flutter_luban: ^0.1.12
   path_provider: ^2.0.1
-  
 
 dev_dependencies:
   hive_generator: ^1.0.1
   build_runner: ^1.12.2
+  mockito: ^5.0.5
   flutter_test:
     sdk: flutter
 
