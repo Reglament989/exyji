@@ -1,8 +1,10 @@
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:exyji/helpers/file_helper.dart';
 import 'package:exyji/hivedb/messages.model.dart';
 import 'package:exyji/hivedb/room_cache.model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class InputBlock extends StatefulWidget {
   final String roomUid;
@@ -103,7 +105,8 @@ class _InputBlockState extends State<InputBlock> {
                     textCapitalization: TextCapitalization.sentences,
                     controller: inputMessageController,
                     decoration: InputDecoration(
-                        border: InputBorder.none, hintText: "Your message..."),
+                        border: InputBorder.none,
+                        hintText: LocaleKeys.chat_inputHint.tr()),
                   ),
                 ),
               )),

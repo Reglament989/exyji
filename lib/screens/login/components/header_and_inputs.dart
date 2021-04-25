@@ -1,5 +1,7 @@
 import 'package:exyji/constants.dart';
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HeaderAndInputs extends StatelessWidget {
   const HeaderAndInputs({
@@ -18,7 +20,7 @@ class HeaderAndInputs extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(bottom: dPadding * 6),
           child: Text(
-            "Andro X",
+            LocaleKeys.title.tr(),
             style: TextStyle(
                 color: Colors.white, fontSize: 28, fontWeight: FontWeight.w600),
           ),
@@ -29,7 +31,7 @@ class HeaderAndInputs extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Username",
+                LocaleKeys.login_usernameInput.tr(),
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.7),
                     fontWeight: FontWeight.w600),
@@ -49,7 +51,7 @@ class HeaderAndInputs extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Password",
+              Text(LocaleKeys.login_passwordInput.tr(),
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontWeight: FontWeight.w600)),
@@ -73,7 +75,7 @@ class HeaderAndInputs extends StatelessWidget {
               child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: dPadding * 2, vertical: dPadding),
-                  child: Text("Sign in",
+                  child: Text(LocaleKeys.login_submitButton.tr(),
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700)))),
         ),

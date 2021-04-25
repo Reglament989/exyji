@@ -1,10 +1,12 @@
 import 'package:animations/animations.dart';
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:exyji/screens/home/components/body.dart';
 import 'package:exyji/screens/home/components/bottom_navy.dart';
 import 'package:exyji/screens/home/components/create_chat_menu.dart';
 import 'package:exyji/screens/home/components/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -37,7 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home"), centerTitle: true),
+      appBar:
+          AppBar(title: Text(LocaleKeys.home_title.tr()), centerTitle: true),
       drawer: HomeDrawer(),
       floatingActionButton: FabCircularMenu(
           key: fabKey,

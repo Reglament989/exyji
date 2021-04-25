@@ -1,5 +1,7 @@
 import 'package:exyji/constants.dart';
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DrawerSpecItem {
   final String title;
@@ -24,14 +26,33 @@ class HomeDrawer extends StatelessWidget {
           icon: Icons.info,
           callback: () {}),
       DrawerSpecItem(
-          title: "Special features", icon: Icons.extension, callback: () {}),
+          title: LocaleKeys.home_drawer_specialFeatures.tr(),
+          icon: Icons.extension,
+          callback: () {}),
       DrawerSpecItem(
-          title: "Dashboard", icon: Icons.dashboard, callback: () {}),
-      DrawerSpecItem(title: "Themes", icon: Icons.color_lens, callback: () {}),
-      DrawerSpecItem(title: "News", icon: Icons.assignment, callback: () {}),
-      DrawerSpecItem(title: "Settings", icon: Icons.settings, callback: () {}),
-      DrawerSpecItem(title: "About", icon: Icons.info, callback: () {}),
-      DrawerSpecItem(title: "Log out", icon: Icons.logout, callback: () {}),
+          title: LocaleKeys.home_drawer_dashboard.tr(),
+          icon: Icons.dashboard,
+          callback: () {}),
+      DrawerSpecItem(
+          title: LocaleKeys.home_drawer_themes.tr(),
+          icon: Icons.color_lens,
+          callback: () {}),
+      DrawerSpecItem(
+          title: LocaleKeys.home_drawer_news.tr(),
+          icon: Icons.assignment,
+          callback: () {}),
+      DrawerSpecItem(
+          title: LocaleKeys.home_drawer_settings.tr(),
+          icon: Icons.settings,
+          callback: () {}),
+      DrawerSpecItem(
+          title: LocaleKeys.home_drawer_about.tr(),
+          icon: Icons.info,
+          callback: () {}),
+      DrawerSpecItem(
+          title: LocaleKeys.home_drawer_logout.tr(),
+          icon: Icons.logout,
+          callback: () {}),
     ];
     return Drawer(
       child: ListView.separated(

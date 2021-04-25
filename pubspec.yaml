@@ -70,6 +70,7 @@ dependencies:
   file_selector_web: ^0.8.1
   flutter_luban: ^0.1.12
   path_provider: ^2.0.1
+  easy_localization: ^3.0.0
 
 dev_dependencies:
   hive_generator: ^1.0.1
@@ -93,6 +94,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/lottie/
+    - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

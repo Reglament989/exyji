@@ -1,0 +1,52 @@
+{
+    "title": "Exyji",
+    "login": {
+        "usernameInput": "Ник-нейм",
+        "passwordInput": "Пароль",
+        "submitButton": "Войти",
+        "signUpTooltip": "Нет аккаунта? Зарегистрировать >",
+        "changeServerTooltip": "Изменить сервер?"
+    },
+    "home": {
+        "title": "Exyji",
+        "navy": {
+            "listWithAllRooms": "Все",
+            "listWithContacts": "Контакты",
+            "listWithChannels": "Каналы",
+            "listWithBots": "Боты"
+        },
+        "createChatMenu": {
+            "labelRoomName": "Имя комнаты",
+            "labelRoomDescription": "Описание комнаты",
+            "createButton": "Создать"
+        },
+        "drawer": {
+            "specialFeatures": "Особые возможности",
+            "dashboard": "Статистика",
+            "themes": "Внешний вид",
+            "news": "Новости",
+            "settings": "Настройки",
+            "about": "О нас",
+            "logout": "Выйти"
+        }
+    },
+    "discover": {
+        "flexOptions": {
+            "header": "Гибкость",
+            "lorem": "Вы можете настроить все в этом приложении, цвета, форми, и.т.д"
+        },
+        "aboutOpenSource": {
+            "header": "Мы поддерживаем Open Source",
+            "lorem": "Весь исходный код доступен на github. Никаких секретов для пользователей, только магия"
+        },
+        "aboutEncryption": {
+            "header": "Полное шифрование",
+            "lorem": "Все данные хранятся на клиенте, сервер работает с брокером сообщений, он просто доставляет ваше сообщение"
+        },
+        "pushButton": "Вперед на встречу к экспериментам",
+        "skipButton": "Пропустить"
+    },
+    "chat": {
+        "inputHint": "Твое сообщение..."
+    }
+}

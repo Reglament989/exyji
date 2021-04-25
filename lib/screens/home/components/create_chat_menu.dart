@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:exyji/constants.dart';
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:exyji/helpers/file_helper.dart';
 import 'package:exyji/hivedb/messages.model.dart';
 import 'package:exyji/hivedb/room.model.dart';
@@ -9,7 +10,7 @@ import 'package:exyji/hivedb/room_cache.model.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:hive/hive.dart';
-// import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 enum PageViewStruct { all, contact, channels, bots }
 
@@ -133,7 +134,8 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
                       controller: roomNameController,
                       maxLength: 21,
                       decoration: InputDecoration(
-                        labelText: 'Room name',
+                        labelText:
+                            LocaleKeys.home_createChatMenu_labelRoomName.tr(),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide: BorderSide(width: 3)),
@@ -146,7 +148,9 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
                         maxLines: 4,
                         maxLength: 300,
                         decoration: InputDecoration(
-                          labelText: 'Room description',
+                          labelText: LocaleKeys
+                              .home_createChatMenu_labelRoomDescription
+                              .tr(),
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
@@ -159,7 +163,7 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
                   child: ElevatedButton.icon(
                     onPressed: () => _createNewRoom(),
                     label: Text(
-                      'Create',
+                      LocaleKeys.home_createChatMenu_createButton.tr(),
                       style: TextStyle(fontSize: 16),
                     ),
                     icon: Icon(Icons.create),

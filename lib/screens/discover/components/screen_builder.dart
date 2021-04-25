@@ -1,6 +1,8 @@
 import 'package:exyji/constants.dart';
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DiscoverScreen extends StatelessWidget {
   final String header;
@@ -46,7 +48,7 @@ class DiscoverScreen extends StatelessWidget {
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30.0)))),
                       child: Text(
-                        "Skip",
+                        LocaleKeys.discover_skipButton.tr(),
                         style: TextStyle(color: Colors.white.withOpacity(0.9)),
                       ),
                       onPressed: () {
@@ -70,6 +72,7 @@ class DiscoverScreen extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 30),
                     child: Text(
                       header,
+                      textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                     ),
@@ -97,6 +100,7 @@ class DiscoverScreen extends StatelessWidget {
                             EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                         child: Text(
                           buttonTitle!,
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 18),
                         ),
                       ),

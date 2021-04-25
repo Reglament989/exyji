@@ -1,6 +1,8 @@
 import 'package:exyji/constants.dart';
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:exyji/screens/discover/components/screen_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -35,9 +37,8 @@ class _BodyState extends State<Body> {
         scrollDirection: Axis.vertical,
         children: [
           DiscoverScreen(
-            header: "Flex options",
-            lorem:
-                "You can setup any of this application, beggining colors ended forms, position etc.",
+            header: LocaleKeys.discover_flexOptions_header.tr(),
+            lorem: LocaleKeys.discover_flexOptions_lorem.tr(),
             lottieAsset: Assets.flasksAnimation,
             backgroundColor: Colors.cyan.withOpacity(0.5),
             nextScreen: this.nextScreen,
@@ -45,21 +46,19 @@ class _BodyState extends State<Body> {
             arrowDown: true,
           ),
           DiscoverScreen(
-            header: "We have support Open Source",
-            lorem:
-                "All sources avalible on notabug, and can be reviewed. No secrets for users, only magic",
+            header: LocaleKeys.discover_aboutOpenSource_header.tr(),
+            lorem: LocaleKeys.discover_aboutOpenSource_lorem.tr(),
             lottieAsset: Assets.foss,
             backgroundColor: Colors.cyan.withOpacity(0.5),
             nextScreen: this.nextScreen,
           ),
           DiscoverScreen(
-            header: "Fully encryption",
-            lorem:
-                "All data stored on client, server work on message broker, he just delivered your message to others",
+            header: LocaleKeys.discover_aboutEncryption_header.tr(),
+            lorem: LocaleKeys.discover_aboutEncryption_lorem.tr(),
             lottieAsset: Assets.lockerAnimation,
             backgroundColor: Colors.cyan.withOpacity(0.5),
             nextScreen: this.nextScreen,
-            buttonTitle: "Let's go to a meeting experiments",
+            buttonTitle: LocaleKeys.discover_pushButton.tr(),
           ),
         ],
       ),

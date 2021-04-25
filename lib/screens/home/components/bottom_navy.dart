@@ -1,5 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BottomNavy extends StatelessWidget {
   const BottomNavy(
@@ -28,25 +30,25 @@ class BottomNavy extends StatelessWidget {
       items: <BottomNavyBarItem>[
         BottomNavyBarItem(
             title: Text(
-              'All',
+              LocaleKeys.home_navy_listWithAllRooms.tr(),
               textAlign: TextAlign.center,
             ),
             icon: Icon(Icons.home)),
         BottomNavyBarItem(
             title: Text(
-              'Contacts',
+              LocaleKeys.home_navy_listWithContacts.tr(),
               textAlign: TextAlign.center,
             ),
             icon: Icon(Icons.account_circle)),
         BottomNavyBarItem(
             title: Text(
-              'Channels',
+              LocaleKeys.home_navy_listWithChannels.tr(),
               textAlign: TextAlign.center,
             ),
             icon: Icon(Icons.public)),
         BottomNavyBarItem(
             title: Text(
-              'Bots',
+              LocaleKeys.home_navy_listWithBots.tr(),
               textAlign: TextAlign.center,
             ),
             icon: Icon(Icons.precision_manufacturing_sharp)),

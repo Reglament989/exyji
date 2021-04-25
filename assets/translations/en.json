@@ -1,0 +1,52 @@
+{
+    "title": "Exyji",
+    "login": {
+        "usernameInput": "Username",
+        "passwordInput": "Password",
+        "submitButton": "Sign in",
+        "signUpTooltip": "Not have account? Sign up >",
+        "changeServerTooltip": "Change server?"
+    },
+    "home": {
+        "title": "Home",
+        "navy": {
+            "listWithAllRooms": "All",
+            "listWithContacts": "Contacts",
+            "listWithChannels": "Channels",
+            "listWithBots": "Bots"
+        },
+        "createChatMenu": {
+            "labelRoomName": "Room name",
+            "labelRoomDescription": "Room description",
+            "createButton": "Create"
+        },
+        "drawer": {
+            "specialFeatures": "Special features",
+            "dashboard": "Dashboard",
+            "themes": "Themes",
+            "news": "News",
+            "settings": "Settings",
+            "about": "About",
+            "logout": "Log out"
+        }
+    },
+    "discover": {
+        "flexOptions": {
+            "header": "Flex options",
+            "lorem": "You can setup any of this application, beggining colors ended forms, position etc."
+        },
+        "aboutOpenSource": {
+            "header": "We have support Open Source",
+            "lorem": "All sources avalible on github, and can be reviewed. No secrets for users, only magic"
+        },
+        "aboutEncryption": {
+            "header": "Fully encryption",
+            "lorem": "All data stored on client, server work on message broker, he just delivered your message to others"
+        },
+        "pushButton": "Let's go to a meeting experiments",
+        "skipButton": "Skip"
+    },
+    "chat": {
+        "inputHint": "Your message..."
+    }
+}

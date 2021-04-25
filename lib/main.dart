@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:exyji/constants.dart';
+import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:exyji/hivedb/messages.model.dart';
 import 'package:exyji/hivedb/room.model.dart';
 import 'package:exyji/screens/discover/discover_screen.dart';
@@ -8,9 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'generated/codegen_loader.g.dart';
 import 'hivedb/room_cache.model.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Hive.initFlutter();
 
   Hive.registerAdapter(RoomModelAdapter());
@@ -29,7 +34,12 @@ void main() async {
   });
   // await rooms.deleteFromDisk();
   // await Hive.openBox("Global");
-  runApp(MyApp());
+  runApp(EasyLocalization(
+      assetLoader: CodegenLoader(),
+      supportedLocales: [Locale('en'), Locale('ru')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -37,8 +47,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       debugShowCheckedModeBanner: false,
-      title: 'Andro X',
+      title: LocaleKeys.title.tr(),
       routes: {
         AppRouter.discover: (ctx) => DiscoverScreen(),
         AppRouter.login: (ctx) => LoginScreen(),
