@@ -34,11 +34,11 @@ class ReplyModel extends HiveObject {
 
 @HiveType(typeId: 7)
 enum TypeMessage {
-  @HiveField(0, defaultValue: true)
+  @HiveField(0)
   photo,
-  @HiveField(1, defaultValue: true)
+  @HiveField(1)
   text,
-  @HiveField(2, defaultValue: true)
+  @HiveField(2)
   file
 }
 
@@ -50,10 +50,10 @@ class MediaMessage {
 
 @HiveType(typeId: 3)
 class MessagesModel extends HiveObject {
-  @HiveField(0, defaultValue: true)
+  @HiveField(0)
   String uid = Uuid().v4();
 
-  @HiveField(1, defaultValue: true)
+  @HiveField(1)
   DateTime createdAt = DateTime.now();
 
   @HiveField(2)
@@ -62,10 +62,10 @@ class MessagesModel extends HiveObject {
   @HiveField(3)
   String? replyUid;
 
-  @HiveField(4, defaultValue: true)
+  @HiveField(4)
   bool isDecrypted = false;
 
-  @HiveField(5, defaultValue: true)
+  @HiveField(5)
   String messageData = "";
 
   @HiveField(6)
@@ -74,7 +74,7 @@ class MessagesModel extends HiveObject {
   @HiveField(7)
   late String senderUid;
 
-  @HiveField(8, defaultValue: true)
+  @HiveField(8)
   TypeMessage type = TypeMessage.text;
 
   @HiveField(9)

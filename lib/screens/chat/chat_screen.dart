@@ -42,7 +42,7 @@ class ChatScreen extends StatelessWidget {
               _showPopupMenu(details.globalPosition, context);
             },
             child: Padding(
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.all(15),
                 child: const Icon(Icons.more_vert)),
           ), // , arguments: InviteViewArguments(chatId: args.chatId)
         ],

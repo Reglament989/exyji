@@ -33,6 +33,15 @@ class _BodyState extends State<Body> {
     // inputMessageController.text = Hive.box<Room>('Room').get(roomId).lastInput;
     cache = Hive.box<RoomCache>("Room-${room.uid}-cache")
         .get('cache', defaultValue: RoomCache()) as RoomCache;
+    if (!cache.isInBox) {
+      debugPrint("Fallback save cache");
+      Hive.box<RoomCache>("Room-${room.uid}-cache").put('cache', cache);
+    } else {
+      isReplyed = true;
+      replyBodyMessage = cache.replyBodyMessage!;
+      replyMessageId = cache.replyMessageId!;
+      replyFrom = cache.replyFrom!;
+    }
     super.initState();
   }
 

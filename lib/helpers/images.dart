@@ -15,6 +15,6 @@ Future<Uint8List> compressImage({required String imagePath}) async {
     mode: CompressMode.LARGE2SMALL, //default AUTO
   );
   final filePath = await Luban.compressImage(compressObject);
-  final uint = await File(filePath).readAsBytes();
+  final uint = await File(filePath!).readAsBytes();
   return uint;
 }

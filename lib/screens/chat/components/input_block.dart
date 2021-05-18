@@ -43,8 +43,10 @@ class _InputBlockState extends State<InputBlock> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration:
-            BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
+        decoration: BoxDecoration(
+            border: Border(
+          top: BorderSide(color: Colors.black, width: 1),
+        )),
         height: 65,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
@@ -56,10 +58,13 @@ class _InputBlockState extends State<InputBlock> {
                 onTap: () async {
                   final rawFile =
                       await FileApi.pick(extensions: ['jpg', 'png']);
+                  if (rawFile == null) {
+                    return;
+                  }
                   final newMessage = MessagesModel();
                   newMessage.type = TypeMessage.photo;
                   final media = MediaMessage();
-                  media..data = rawFile!.first;
+                  media..data = rawFile.first;
                   newMessage.media = media;
                   newMessage.senderUid = "me";
                   newMessage.isDecrypted = true;

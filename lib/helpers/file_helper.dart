@@ -23,14 +23,20 @@ class FileApi {
           await Future.forEach(files!,
               (XFile f) async => endUintFiles.add(await f.readAsBytes()));
         }
-        return endUintFiles;
+        if (endUintFiles.length > 0) {
+          return endUintFiles;
+        }
+        return null;
       }
       final XFile? file = await openFile(acceptedTypeGroups: [typeGroup]);
+      if (file == null) {
+        return null;
+      }
       if (extensions == ['jpg', 'png']) {
-        final compressedFile = await compressImage(imagePath: file!.path);
+        final compressedFile = await compressImage(imagePath: file.path);
         return List.of([compressedFile]);
       }
-      return List.of([await file!.readAsBytes()]);
+      return List.of([await file.readAsBytes()]);
     }
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -50,7 +56,10 @@ class FileApi {
               (String? filePath) async =>
                   endUintFiles.add(await File(filePath!).readAsBytes()));
         }
-        return endUintFiles;
+        if (endUintFiles.length > 0) {
+          return endUintFiles;
+        }
+        return null;
       }
       if (result.files.single.path != null) {
         final String path = result.files.single.path as String;

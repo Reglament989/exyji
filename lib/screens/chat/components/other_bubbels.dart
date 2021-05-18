@@ -9,7 +9,7 @@ class PhotoBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(10),
       child: Container(
         constraints: BoxConstraints(maxHeight: 500, maxWidth: 300),
         decoration: BoxDecoration(

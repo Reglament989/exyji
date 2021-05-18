@@ -12,7 +12,7 @@ class ReplyContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.cyan[500],
-      padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [

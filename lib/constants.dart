@@ -17,6 +17,7 @@ class AppRouter {
   static const login = "login";
   static const home = "home";
   static const chatDetails = "chat/details";
+  static const about = "about";
 }
 
 class Assets {
@@ -24,6 +25,7 @@ class Assets {
   static const lockerAnimation = "assets/lottie/locker.json";
   static const arrowDownAnimation = "assets/lottie/arrow-down.json";
   static const foss = "assets/lottie/foss.json";
+  static const github = "assets/icons/logo-github.svg";
 }
 
 class Config {

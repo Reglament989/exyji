@@ -32,6 +32,15 @@ class Bubble extends StatelessWidget {
       required this.slidableController,
       this.isMedia = false,
       this.media});
+
+  Future<void> _sendReply() async {
+    if (isMedia) {
+      await callbackReply(uid: uid, replyBody: "Photo", replyFromBody: sender);
+      return;
+    }
+    await callbackReply(uid: uid, replyBody: body, replyFromBody: sender);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -48,8 +57,7 @@ class Bubble extends StatelessWidget {
         IconSlideAction(
           color: Colors.transparent,
           iconWidget: Icon(Icons.reply_sharp, color: Colors.black),
-          onTap: () async => await callbackReply(
-              uid: uid, replyBody: body, replyFromBody: sender),
+          onTap: _sendReply,
         ),
       ],
       actions: [
@@ -85,8 +93,8 @@ class Bubble extends StatelessWidget {
             children: [
               Container(
                 constraints: BoxConstraints(maxWidth: 400, minWidth: 35),
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -108,7 +116,7 @@ class Bubble extends StatelessWidget {
                         children: [
                           Container(
                             padding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 8),
+                                vertical: 3.5, horizontal: 10),
                             decoration: BoxDecoration(
                                 border: Border(
                                     left: BorderSide(

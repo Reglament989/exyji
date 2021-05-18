@@ -104,36 +104,32 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OpenContainer(
-        closedElevation: 0,
-        closedColor: Colors.transparent,
-        openElevation: 0,
-        openColor: Colors.transparent,
-        closedBuilder: (BuildContext ctx, VoidCallback _) => GestureDetector(
-            onLongPressStart: (LongPressStartDetails details) async =>
-                await _showMenu(details.globalPosition, ctx),
-            child: ListTile(
-                title: Text(room.title),
-                subtitle: Text(room.lastMessage),
-                leading: Container(
-                  width: 56,
-                  height: 56,
-                  child: Center(
-                    child: CachedNetworkImage(
-                      imageUrl: room.photoURL,
-                      imageBuilder: (ctx, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            )),
-                      ),
-                    ),
-                  ),
+    return GestureDetector(
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ChatScreen(
+                  room: room,
                 ))),
-        openBuilder: (BuildContext ctx, VoidCallback _) => ChatScreen(
-              room: room,
-            ));
+        onLongPressStart: (LongPressStartDetails details) async =>
+            await _showMenu(details.globalPosition, ctx),
+        child: ListTile(
+            title: Text(room.title),
+            subtitle: Text(room.lastMessage),
+            leading: Container(
+              width: 56,
+              height: 56,
+              child: Center(
+                child: CachedNetworkImage(
+                  imageUrl: room.photoURL,
+                  imageBuilder: (ctx, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        )),
+                  ),
+                ),
+              ),
+            )));
   }
 }

@@ -3,6 +3,8 @@ import 'package:exyji/constants.dart';
 import 'package:exyji/generated/locale_keys.g.dart';
 import 'package:exyji/hivedb/messages.model.dart';
 import 'package:exyji/hivedb/room.model.dart';
+import 'package:exyji/hivedb/global.model.dart';
+import 'package:exyji/screens/about/about_screen.dart';
 import 'package:exyji/screens/discover/discover_screen.dart';
 import 'package:exyji/screens/home/home_screen.dart';
 import 'package:exyji/screens/login/login_screen.dart';
@@ -26,6 +28,7 @@ void main() async {
   Hive.registerAdapter(ReplyModelAdapter());
   Hive.registerAdapter(MediaMessageAdapter());
   Hive.registerAdapter(TypeMessageAdapter());
+  Hive.registerAdapter(GlobalAdapter());
 
   final rooms = await Hive.openBox<RoomModel>("Rooms");
   await Future.forEach(rooms.values, (RoomModel r) async {
@@ -33,7 +36,12 @@ void main() async {
     await Hive.openBox<RoomCache>("Room-${r.uid}-cache");
   });
   // await rooms.deleteFromDisk();
-  // await Hive.openBox("Global");
+  final globalBox = await Hive.openBox<Global>("Global");
+  final global = globalBox.get('global');
+  if (global == null) {
+    debugPrint("Fallback create global");
+    await Hive.box<Global>("Global").put('global', Global());
+  }
   runApp(EasyLocalization(
       assetLoader: CodegenLoader(),
       supportedLocales: [Locale('en'), Locale('ru')],
@@ -55,10 +63,11 @@ class MyApp extends StatelessWidget {
       routes: {
         AppRouter.discover: (ctx) => DiscoverScreen(),
         AppRouter.login: (ctx) => LoginScreen(),
-        AppRouter.home: (ctx) => HomeScreen()
+        AppRouter.home: (ctx) => HomeScreen(),
+        AppRouter.about: (ctx) => AboutScreen()
       },
       initialRoute: AppRouter.login,
-      theme: ThemeData(fontFamily: 'YTSans').copyWith(
+      theme: ThemeData().copyWith(
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
             TargetPlatform.android: ZoomPageTransitionsBuilder(),
