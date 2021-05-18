@@ -17,11 +17,11 @@ allprojects {
         jcenter()
     }
 
-    tasks.withType(JavaCompile).configureEach {
-        javaCompiler = javaToolchains.compilerFor {
-            languageVersion = JavaLanguageVersion.of(15)
-        }
-    }
+    // tasks.withType(JavaCompile).configureEach {
+    //     javaCompiler = javaToolchains.compilerFor {
+    //         languageVersion = JavaLanguageVersion.of(15)
+    //     }
+    // }
 }
 
 rootProject.buildDir = '../build'
