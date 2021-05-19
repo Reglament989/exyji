@@ -41,7 +41,7 @@ class _InputBlockState extends State<InputBlock> {
   }
 
   Future<void> _sendAttachment() async {
-    final List<EFile>? eFiles = await FileApi.pick(extensions: ['*']);
+    final List<EFile>? eFiles = await FileApi.pick(extensions: []);
     if (eFiles == null) {
       return;
     }

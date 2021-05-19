@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:exyji/helpers/filesize.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class FileBubble extends StatelessWidget {
   final Widget extensionImage;
@@ -29,7 +30,32 @@ class FileBubble extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text(caption), Text(filesize(size))],
+              children: [
+                Text(caption),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      filesize(size),
+                      style: TextStyle(fontSize: 11),
+                    ),
+                    new LinearPercentIndicator(
+                      // alignment: MainAxisAlignment.spaceBetween,
+                      width: 60.0,
+                      lineHeight: 8.0,
+                      percent: 0.5,
+                      center: Text(
+                        "50%",
+                        style: TextStyle(fontSize: 8, color: Colors.indigo),
+                      ),
+                      linearStrokeCap: LinearStrokeCap.roundAll,
+                      backgroundColor: Colors.grey,
+                      progressColor: Colors.blue,
+                    )
+                  ],
+                )
+              ],
             ),
           )
         ],

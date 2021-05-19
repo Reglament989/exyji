@@ -70,6 +70,8 @@ class MyApp extends StatelessWidget {
       },
       initialRoute: AppRouter.login,
       theme: ThemeData().copyWith(
+        appBarTheme:
+            Theme.of(context).appBarTheme.copyWith(brightness: Brightness.dark),
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
             TargetPlatform.android: ZoomPageTransitionsBuilder(),
