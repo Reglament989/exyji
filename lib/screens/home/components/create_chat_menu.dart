@@ -85,10 +85,12 @@ class _CreateChatMenuState extends State<CreateChatMenu> {
   }
 
   Future _changeRoomPhoto() async {
-    final rawFile = await FileApi.pick(extensions: ['jpg', 'png']);
-    setState(() {
-      roomAvatar = rawFile!.first;
-    });
+    final List<EFile>? eFiles = await FileApi.pick(extensions: ['jpg', 'png']);
+    if (eFiles != null) {
+      setState(() {
+        roomAvatar = eFiles.first.data;
+      });
+    }
   }
 
   @override

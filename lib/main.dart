@@ -5,6 +5,7 @@ import 'package:exyji/hivedb/messages.model.dart';
 import 'package:exyji/hivedb/room.model.dart';
 import 'package:exyji/hivedb/global.model.dart';
 import 'package:exyji/screens/about/about_screen.dart';
+import 'package:exyji/screens/chat/chat_screen.dart';
 import 'package:exyji/screens/discover/discover_screen.dart';
 import 'package:exyji/screens/home/home_screen.dart';
 import 'package:exyji/screens/login/login_screen.dart';
@@ -64,7 +65,8 @@ class MyApp extends StatelessWidget {
         AppRouter.discover: (ctx) => DiscoverScreen(),
         AppRouter.login: (ctx) => LoginScreen(),
         AppRouter.home: (ctx) => HomeScreen(),
-        AppRouter.about: (ctx) => AboutScreen()
+        AppRouter.about: (ctx) => AboutScreen(),
+        AppRouter.chat: (ctx) => ChatScreen(),
       },
       initialRoute: AppRouter.login,
       theme: ThemeData().copyWith(

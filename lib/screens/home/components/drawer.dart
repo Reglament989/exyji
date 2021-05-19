@@ -126,16 +126,15 @@ class _DrawerItemState extends State<DrawerItem> {
   }
 
   Future<void> _changePhotoProfile() async {
-    final List<Uint8List>? file =
-        await FileApi.pick(extensions: ['jpg', 'png']);
+    final List<EFile>? file = await FileApi.pick(extensions: ['jpg', 'png']);
     if (file == null) {
       return;
     }
     final global = Hive.box<Global>('Global').get('global')!;
-    global..avatar = file.first;
+    global..avatar = file.first.data;
     global.save();
     setState(() {
-      avatar = file.first;
+      avatar = file.first.data;
     });
   }
 

@@ -8,14 +8,13 @@ import 'input_block.dart';
 import 'messages_list.dart';
 
 class Body extends StatefulWidget {
-  final room;
+  final RoomModel room;
   Body({required this.room});
   @override
   _BodyState createState() => _BodyState(room: room);
 }
 
 class _BodyState extends State<Body> {
-  static const uuid = const Uuid();
   final TextEditingController inputMessageController = TextEditingController();
   final RoomModel room;
   bool isReplyed = false;
@@ -23,7 +22,7 @@ class _BodyState extends State<Body> {
   String replyMessageId = '';
   dynamic replyFrom;
   List existsMessages = [];
-  late RoomCache cache;
+  late RoomCache? cache;
 
   _BodyState({required this.room});
 
@@ -31,16 +30,10 @@ class _BodyState extends State<Body> {
   void initState() {
     // existsMessages = List.of(Hive.box<Room>('Room').get(roomId).existsMessages);
     // inputMessageController.text = Hive.box<Room>('Room').get(roomId).lastInput;
-    cache = Hive.box<RoomCache>("Room-${room.uid}-cache")
-        .get('cache', defaultValue: RoomCache()) as RoomCache;
-    if (!cache.isInBox) {
-      debugPrint("Fallback save cache");
-      Hive.box<RoomCache>("Room-${room.uid}-cache").put('cache', cache);
-    } else {
-      isReplyed = true;
-      replyBodyMessage = cache.replyBodyMessage!;
-      replyMessageId = cache.replyMessageId!;
-      replyFrom = cache.replyFrom!;
+    cache = Hive.box<RoomCache>("Room-${room.uid}-cache").get('cache');
+    if (cache == null) {
+      cache = RoomCache();
+      Hive.box<RoomCache>("Room-${room.uid}-cache").put('cache', cache!);
     }
     super.initState();
   }
@@ -55,10 +48,10 @@ class _BodyState extends State<Body> {
     setState(() {
       isReplyed = false;
     });
-    cache.replyBodyMessage = null;
-    cache.replyMessageId = null;
-    cache.replyFrom = null;
-    await cache.save();
+    cache!.replyBodyMessage = null;
+    cache!.replyMessageId = null;
+    cache!.replyFrom = null;
+    await cache!.save();
   }
 
   void replyCallback(
@@ -67,10 +60,10 @@ class _BodyState extends State<Body> {
     setState(() {
       isReplyed = true;
     });
-    cache.replyBodyMessage = replyBody;
-    cache.replyMessageId = uid;
-    cache.replyFrom = replyFromBody;
-    await cache.save();
+    cache!.replyBodyMessage = replyBody;
+    cache!.replyMessageId = uid;
+    cache!.replyFrom = replyFromBody;
+    await cache!.save();
   }
 
   @override
@@ -85,7 +78,7 @@ class _BodyState extends State<Body> {
         ),
         if (isReplyed)
           ReplyContent(
-              replyBody: cache.replyBodyMessage!,
+              replyBody: cache!.replyBodyMessage!,
               closeCallback: closeReplyCallback),
         InputBlock(roomUid: room.uid, closeCallback: closeReplyCallback)
       ],

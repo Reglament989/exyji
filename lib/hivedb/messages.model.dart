@@ -45,7 +45,13 @@ enum TypeMessage {
 @HiveType(typeId: 8)
 class MediaMessage {
   @HiveField(0)
-  Uint8List? data;
+  late Uint8List data;
+  @HiveField(1)
+  late String fileExtension;
+  @HiveField(2)
+  late int size;
+  @HiveField(3)
+  late String caption;
 }
 
 @HiveType(typeId: 3)

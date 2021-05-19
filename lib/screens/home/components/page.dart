@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:exyji/constants.dart';
 import 'package:exyji/hivedb/room.model.dart';
 import 'package:exyji/screens/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -105,10 +106,8 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ChatScreen(
-                  room: room,
-                ))),
+        onTap: () => Navigator.of(context).pushNamed(AppRouter.chat,
+            arguments: ChatScreenArguments(room: room)),
         onLongPressStart: (LongPressStartDetails details) async =>
             await _showMenu(details.globalPosition, ctx),
         child: ListTile(

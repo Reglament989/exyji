@@ -4,7 +4,9 @@ import 'dart:typed_data';
 import 'package:flutter_luban/flutter_luban.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<Uint8List> compressImage({required String imagePath}) async {
+import 'file_helper.dart';
+
+Future<EFile> compressImage({required String imagePath}) async {
   final tempDir = await getTemporaryDirectory();
   CompressObject compressObject = CompressObject(
     imageFile: File(imagePath), //image
@@ -15,6 +17,8 @@ Future<Uint8List> compressImage({required String imagePath}) async {
     mode: CompressMode.LARGE2SMALL, //default AUTO
   );
   final filePath = await Luban.compressImage(compressObject);
-  final uint = await File(filePath!).readAsBytes();
-  return uint;
+  final file = File(filePath!);
+  final fileName = file.path.split('/').last.split('.');
+  return EFile((await file.readAsBytes()), (await file.stat()).size,
+      fileName.last, fileName.first);
 }

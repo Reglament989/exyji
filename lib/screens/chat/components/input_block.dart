@@ -40,6 +40,69 @@ class _InputBlockState extends State<InputBlock> {
     super.dispose();
   }
 
+  Future<void> _sendAttachment() async {
+    final List<EFile>? eFiles = await FileApi.pick(extensions: ['*']);
+    if (eFiles == null) {
+      return;
+    }
+    final newMessage = MessagesModel();
+    newMessage.type = TypeMessage.photo;
+    final media = MediaMessage();
+    media..data = eFiles.first.data;
+    media..fileExtension = eFiles.first.fileExtension;
+    media..size = eFiles.first.size;
+    media..caption = eFiles.first.caption;
+    newMessage.media = media;
+    newMessage.senderUid = "me";
+    newMessage.isDecrypted = true;
+    final block = EncryptedBlock();
+    block..crypto = "";
+    block..hash = "";
+    block..prevHash = "";
+    block..signature = "";
+    newMessage.block = block;
+    // debugPrint(cache.replyBodyMessage);
+    if (cache.replyBodyMessage != null) {
+      newMessage.replyUid = cache.replyMessageId;
+      final newReply = ReplyModel();
+      newReply..body = cache.replyBodyMessage!;
+      newReply..from = cache.replyFrom!;
+      newReply..fromUid = cache.replyMessageId!;
+      newMessage.reply = newReply;
+    }
+    await closeCallback();
+    await Hive.box<MessagesModel>("Room-$roomUid").add(newMessage);
+  }
+
+  Future<void> _sendTextMessage() async {
+    if (inputMessageController.text.trim().length > 0) {
+      final newMessage = MessagesModel();
+      newMessage.messageData = inputMessageController.text.trim();
+      newMessage.senderUid = "me";
+      final block = EncryptedBlock();
+      block..crypto = "";
+      block..hash = "";
+      block..prevHash = "";
+      block..signature = "";
+      newMessage.block = block;
+      newMessage.isDecrypted = true;
+      // debugPrint(cache.replyBodyMessage);
+      if (cache.replyBodyMessage != null) {
+        newMessage.replyUid = cache.replyMessageId;
+        final newReply = ReplyModel();
+        newReply..body = cache.replyBodyMessage!;
+        newReply..from = cache.replyFrom!;
+        newReply..fromUid = cache.replyMessageId!;
+        newMessage.reply = newReply;
+      }
+      await Hive.box<MessagesModel>("Room-$roomUid").add(newMessage);
+      inputMessageController.text = "";
+      cache.lastInput = "";
+      await closeCallback();
+      await cache.save();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,40 +118,16 @@ class _InputBlockState extends State<InputBlock> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
-                onTap: () async {
-                  final rawFile =
-                      await FileApi.pick(extensions: ['jpg', 'png']);
-                  if (rawFile == null) {
-                    return;
-                  }
-                  final newMessage = MessagesModel();
-                  newMessage.type = TypeMessage.photo;
-                  final media = MediaMessage();
-                  media..data = rawFile.first;
-                  newMessage.media = media;
-                  newMessage.senderUid = "me";
-                  newMessage.isDecrypted = true;
-                  final block = EncryptedBlock();
-                  block..crypto = "";
-                  block..hash = "";
-                  block..prevHash = "";
-                  block..signature = "";
-                  newMessage.block = block;
-                  // debugPrint(cache.replyBodyMessage);
-                  if (cache.replyBodyMessage != null) {
-                    newMessage.replyUid = cache.replyMessageId;
-                    final newReply = ReplyModel();
-                    newReply..body = cache.replyBodyMessage!;
-                    newReply..from = cache.replyFrom!;
-                    newReply..fromUid = cache.replyMessageId!;
-                    newMessage.reply = newReply;
-                  }
-                  await Hive.box<MessagesModel>("Room-$roomUid")
-                      .add(newMessage);
-                },
-                child: Icon(
-                  Icons.attachment,
-                  size: 32,
+                onTap: _sendAttachment,
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Transform.rotate(
+                    angle: 20,
+                    child: Icon(
+                      Icons.attachment,
+                      size: 28,
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -120,36 +159,7 @@ class _InputBlockState extends State<InputBlock> {
                 padding:
                     EdgeInsets.only(top: 14, bottom: 14, left: 10, right: 5),
                 child: GestureDetector(
-                  onTap: () async {
-                    if (inputMessageController.text.trim().length > 0) {
-                      final newMessage = MessagesModel();
-                      newMessage.messageData =
-                          inputMessageController.text.trim();
-                      newMessage.senderUid = "me";
-                      final block = EncryptedBlock();
-                      block..crypto = "";
-                      block..hash = "";
-                      block..prevHash = "";
-                      block..signature = "";
-                      newMessage.block = block;
-                      newMessage.isDecrypted = true;
-                      // debugPrint(cache.replyBodyMessage);
-                      if (cache.replyBodyMessage != null) {
-                        newMessage.replyUid = cache.replyMessageId;
-                        final newReply = ReplyModel();
-                        newReply..body = cache.replyBodyMessage!;
-                        newReply..from = cache.replyFrom!;
-                        newReply..fromUid = cache.replyMessageId!;
-                        newMessage.reply = newReply;
-                      }
-                      await Hive.box<MessagesModel>("Room-$roomUid")
-                          .add(newMessage);
-                      inputMessageController.text = "";
-                      cache.lastInput = "";
-                      await closeCallback();
-                      await cache.save();
-                    }
-                  },
+                  onTap: _sendTextMessage,
                   child: Icon(Icons.send, size: 32),
                 ),
               )

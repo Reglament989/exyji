@@ -141,15 +141,25 @@ class MediaMessageAdapter extends TypeAdapter<MediaMessage> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MediaMessage()..data = fields[0] as Uint8List?;
+    return MediaMessage()
+      ..data = fields[0] as Uint8List
+      ..fileExtension = fields[1] as String
+      ..size = fields[2] as int
+      ..caption = fields[3] as String;
   }
 
   @override
   void write(BinaryWriter writer, MediaMessage obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.data);
+      ..write(obj.data)
+      ..writeByte(1)
+      ..write(obj.fileExtension)
+      ..writeByte(2)
+      ..write(obj.size)
+      ..writeByte(3)
+      ..write(obj.caption);
   }
 
   @override

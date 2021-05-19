@@ -1,10 +1,13 @@
-import 'package:exyji/helpers/linkify.dart';
+import 'package:exyji/constants.dart';
+import 'package:exyji/helpers/filesize.dart';
 import 'package:exyji/hivedb/messages.model.dart';
-import 'package:exyji/screens/chat/components/other_bubbels.dart';
+import 'package:exyji/screens/chat/components/bubbles/default_bubble.dart';
+import 'package:exyji/screens/chat/components/bubbles/file_bubble.dart';
+import 'package:exyji/screens/chat/components/bubbles/photo_bubble.dart';
+import 'package:exyji/screens/chat/components/bubbles/text_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Bubble extends StatelessWidget {
   final SlidableController slidableController;
@@ -51,12 +54,12 @@ class Bubble extends StatelessWidget {
       secondaryActions: [
         IconSlideAction(
           color: Colors.transparent,
-          iconWidget: Icon(Icons.reply_all_sharp, color: Colors.black),
+          iconWidget: Icon(Icons.reply_all_sharp, color: Colors.white),
           onTap: () => print('replyAll'),
         ),
         IconSlideAction(
           color: Colors.transparent,
-          iconWidget: Icon(Icons.reply_sharp, color: Colors.black),
+          iconWidget: Icon(Icons.reply_sharp, color: Colors.white),
           onTap: _sendReply,
         ),
       ],
@@ -64,100 +67,64 @@ class Bubble extends StatelessWidget {
         SlideAction(
           child: Text(
             date,
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ],
-      child: Builder(builder: (BuildContext ctx) {
+      child: Builder(builder: (context) {
+        Widget extensibleBubble = TextBubble(
+          text: body,
+          padding: isReply ? null : EdgeInsets.all(8),
+        );
         if (isMedia) {
-          return Container(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment:
-                  isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                PhotoBubble(
-                  photo: media!.data!,
-                )
-              ],
-            ),
-          );
+          extensibleBubble = MediaBubble(media: media!);
         }
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment:
-                isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                constraints: BoxConstraints(maxWidth: 400, minWidth: 35),
-                padding: EdgeInsets.all(8),
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: Offset(0, 2), // changes position of shadow
-                      ),
-                    ],
-                    color: Colors.lightBlue[400],
-                    border: Border.all(
-                      color: Colors.lightBlue,
-                    ),
-                    borderRadius: BorderRadius.circular(15)),
-                child: isReply
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 3.5, horizontal: 10),
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    left: BorderSide(
-                                        width: 2, color: Colors.black))),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [Text(replyFrom!), Text(replyBody!)],
-                            ),
-                          ),
-                          LinkText(
-                              text: body,
-                              onOpen: (link) async {
-                                await launch(link.url);
-                              })
-                        ],
-                      )
-                    : Stack(
-                        children: [
-                          LinkText(
-                              text: body,
-                              onOpen: (link) async {
-                                await launch(link.url);
-                              })
-                          // Linkify(
-                          //   onOpen: (link) async {
-                          //     await launch(link.url);
-                          //   },
-                          //   text: body,
-                          //   textAlign: TextAlign.left,
-                          //   textDirection: TextDirection.ltr,
-                          //   style: TextStyle(fontSize: 17, color: Colors.black),
-                          //   linkStyle: TextStyle(color: Colors.indigo),
-                          // ),
-                        ],
-                      ),
-              )
-            ],
-          ),
+        return DefaultBubble(
+          isReply: isReply,
+          isSender: isSender,
+          replyBody: replyBody,
+          replyFrom: replyFrom,
+          extensibleBubble: extensibleBubble,
         );
       }),
     );
+  }
+}
+
+class MediaBubble extends StatelessWidget {
+  final MediaMessage media;
+
+  const MediaBubble({Key? key, required this.media}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    if (imageExtension.contains(media.fileExtension)) {
+      return PhotoBubble(
+          photo: media.data,
+          fileName: media.caption,
+          fileExt: media.fileExtension,
+          fileSize: media.size);
+    }
+    if (soundExtension.contains(media.fileExtension)) {}
+    String asset = Assets.unknownFile;
+    switch (media.fileExtension) {
+      case 'txt':
+        asset = Assets.txtFile;
+        break;
+      case 'pdf':
+        asset = Assets.pdfFile;
+        break;
+      case 'zip':
+        asset = Assets.zipFile;
+        break;
+    }
+    return FileBubble(
+        extensionImage: SizedBox(
+          width: 30,
+          height: 30,
+          child: SvgPicture.asset(asset),
+        ),
+        size: media.size,
+        caption: media.caption,
+        data: media.data);
   }
 }
