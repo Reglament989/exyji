@@ -25,13 +25,16 @@ abstract class FileApi {
         List<EFile> endUintFiles = [];
         final List<XFile>? files =
             await openFiles(acceptedTypeGroups: [typeGroup]);
+        if (files == null) {
+          return null;
+        }
         if (extensions == ['jpg', 'png']) {
-          await Future.forEach(files!, (XFile f) async {
+          await Future.forEach(files, (XFile f) async {
             final compressedFile = await compressImage(imagePath: f.path);
             endUintFiles.add(compressedFile);
           });
         } else {
-          await Future.forEach(files!, (XFile f) async {
+          await Future.forEach(files, (XFile f) async {
             final data = await f.readAsBytes();
             final size = await f.length();
             final fileName = f.path.split('/').last.split('.');
